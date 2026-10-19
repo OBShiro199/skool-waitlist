@@ -110,3 +110,19 @@ export async function updateProfile(id: string, p: Profile) {
   if (row) Object.assign(row, p)
   await writeLocal(rows)
 }
+
+export type SignupRow = Signup & Profile & { id: string; created_at: string; confirmation_sent_at: string | null }
+
+/** Newest first. Used by the private /waitlist page. */
+export async function listSignups(limit = 5000): Promise<SignupRow[]> {
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('waitlist_signups')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit)
+    if (error) throw error
+    return (data ?? []) as SignupRow[]
+  }
+  return (await readLocal()).sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, limit)
+}
