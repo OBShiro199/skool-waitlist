@@ -1,7 +1,14 @@
-import { DotArt } from './DotArt'
-
-const mark = ['....#', '...##', '..o##', '.oo##', 'ooo##']
-
-export function Logo() {
-  return <DotArt rows={mark} cell={4} className="h-4 w-4 flex-none" />
+/** Brand mark: Olly with the stack logos. */
+export function Logo({ size = 28 }: { size?: number }) {
+  return (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      src="/logo.webp"
+      alt=""
+      width={size}
+      height={size}
+      className="flex-none rounded-box border border-hairline object-cover"
+      style={{ width: size, height: size }}
+    />
+  )
 }

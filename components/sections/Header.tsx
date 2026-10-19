@@ -6,16 +6,17 @@ import { Logo } from '@/components/ui/Logo'
 import { useSite } from '@/components/ui/SiteProvider'
 
 const links = [
-  ['Reviews', '#reviews'],
-  ['Curriculum', '#curriculum'],
-  ['What’s inside', '#inside'],
-  ['Pricing', '#pricing'],
-  ['FAQ', '#faq'],
+  ['Reviews', '/#reviews'],
+  ['Curriculum', '/#curriculum'],
+  ['What’s inside', '/#inside'],
+  ['Pricing', '/#pricing'],
+  ['FAQ', '/#faq'],
 ] as const
 
 export function focusJoin() {
   const input = document.getElementById('email-hero') as HTMLInputElement | null
   const target = input ?? document.getElementById('join')
+  if (!target) return void (location.href = '/#join')
   target?.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'center' })
   input?.focus({ preventScroll: true })
 }
@@ -62,7 +63,7 @@ export function Header() {
         }`}
       >
         <div className="mx-auto flex h-12 max-w-[var(--rail)] items-center justify-between gap-4 px-4 md:px-8">
-          <a href="#top" className="flex min-w-0 items-center gap-2 text-14 font-medium text-ink">
+          <a href="/" className="flex min-w-0 items-center gap-2 text-14 font-medium text-ink">
             <Logo />
             <span className="truncate max-[640px]:hidden">{offer.name}</span>
             <span className="min-[641px]:hidden">{offer.shortName}</span>

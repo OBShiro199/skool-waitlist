@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useId, useRef, useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
 import { Check } from 'lucide-react'
 import { join, saveProfile, type JoinStatus } from '@/app/actions/join'
 import { offer, usd } from '@/content/offer'
@@ -29,6 +30,7 @@ export function WaitlistForm({ location, inputId }: { location: string; inputId?
   const [state, setState] = useState<State>('idle')
   const [token, setToken] = useState<string>()
   const [pending, startTransition] = useTransition()
+  const router = useRouter()
   const renderedAt = useRef(0)
   useEffect(() => {
     renderedAt.current = Date.now()
@@ -81,6 +83,10 @@ export function WaitlistForm({ location, inputId }: { location: string; inputId?
       if (res.status === 'ok' || res.status === 'exists') {
         track('waitlist_success', { location, status: res.status, ref: attribution.ref ?? null, utm_campaign: attribution.utm_campaign ?? null })
         markJoined()
+        try {
+          sessionStorage.setItem('joined', JSON.stringify({ token: res.token ?? null, exists: res.status === 'exists', at: Date.now() }))
+        } catch {}
+        router.push('/thanks')
       } else {
         track('waitlist_error', { location, status: res.status })
       }

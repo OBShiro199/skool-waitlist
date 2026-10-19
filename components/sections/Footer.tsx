@@ -9,7 +9,7 @@ export function Footer() {
       <div className="grid gap-10 md:grid-cols-[2fr_1fr_1fr_1fr]">
         <div>
           <p className="flex items-center gap-2 text-14 font-medium text-ink">
-            <Logo /> {offer.name}
+            <Logo size={40} /> {offer.name}
           </p>
           <p className="mt-3 max-w-[44ch] text-13 text-muted">
             A private community where you watch a SaaS get built to $10K/month and build your own alongside it. Run by {offer.host}.
