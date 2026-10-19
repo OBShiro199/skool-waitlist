@@ -64,7 +64,9 @@ function Card({ app, hidden }: { app: App; hidden?: boolean }) {
           <span>
             {app.buildHours}h build · {app.difficulty}
           </span>
-          <span className="text-ink">from ${app.from}/mo</span>
+          <span>
+            You could charge <span className="font-medium text-ink">${app.from}+/mo</span>
+          </span>
         </div>
       </div>
     </article>
