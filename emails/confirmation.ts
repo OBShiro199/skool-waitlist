@@ -65,8 +65,6 @@ export function confirmationHtml() {
   </td></tr>
 
   <tr><td style="border:1px solid ${c.hairline};padding:0;">
-    <a href="${SITE}" style="display:block;"><img src="${SITE}/email-hero.jpg" width="558" alt="Start a profitable app and get 10 paying customers" style="display:block;width:100%;max-width:558px;height:auto;border:0;"></a>
-
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
     <tr><td style="padding:28px 28px 8px;">
       <p style="margin:0;font-size:13px;line-height:18px;color:${c.success};font-weight:500;">&#10003;&nbsp; Confirmed</p>
