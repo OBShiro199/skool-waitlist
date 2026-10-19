@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react'
 
-const RAMP = ' .·:-=+*#%$'
+const RAMP = ' ..··::-=+'
 
 /** Drifting ASCII revenue waves behind the hero. Decorative only. */
 export function AsciiField({ className = '' }: { className?: string }) {
@@ -28,7 +28,7 @@ export function AsciiField({ className = '' }: { className?: string }) {
       canvas.width = w * dpr
       canvas.height = h * dpr
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      ctx.font = `500 ${cell - 2}px ui-monospace, SFMono-Regular, Menlo, monospace`
+      ctx.font = `400 ${cell - 3}px ui-monospace, SFMono-Regular, Menlo, monospace`
       ctx.textAlign = 'center'
       ctx.textBaseline = 'middle'
     }
@@ -52,9 +52,9 @@ export function AsciiField({ className = '' }: { className?: string }) {
           const dy = ny - 0.42
           const edge = Math.min(1, Math.sqrt(dx * dx * 2.2 + dy * dy * 3.2) * 1.6)
           const level = n * edge
-          if (level < 0.32) continue
+          if (level < 0.36) continue
           const ch = RAMP[Math.min(RAMP.length - 1, Math.floor(level * RAMP.length))]
-          ctx.fillStyle = level > 0.82 ? 'rgba(95,134,224,0.75)' : `rgba(138,143,152,${(level * 0.55).toFixed(2)})`
+          ctx.fillStyle = `rgba(138,143,152,${(level * 0.42).toFixed(2)})`
           ctx.fillText(ch, x * cell + cell / 2, y * cell + cell / 2)
         }
       }
@@ -84,5 +84,18 @@ export function AsciiField({ className = '' }: { className?: string }) {
     }
   }, [])
 
-  return <canvas ref={ref} aria-hidden className={`pointer-events-none ${className}`} />
+  return (
+    <canvas
+      ref={ref}
+      aria-hidden
+      className={`pointer-events-none ${className}`}
+      // soft fade at the bottom and sides so the field never ends on a hard line
+      style={{
+        maskImage: 'linear-gradient(to bottom, #000 0%, #000 45%, transparent 92%), linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)',
+        maskComposite: 'intersect',
+        WebkitMaskImage: 'linear-gradient(to bottom, #000 0%, #000 45%, transparent 92%), linear-gradient(to right, transparent, #000 12%, #000 88%, transparent)',
+        WebkitMaskComposite: 'source-in',
+      }}
+    />
+  )
 }

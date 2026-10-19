@@ -264,14 +264,12 @@ b, strong { font-weight: 600; }
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  padding: 2px;
+  padding: 1px;
   background: conic-gradient(
     from var(--laser-angle),
-    transparent 0deg 200deg,
-    rgba(95, 134, 224, 0.25) 250deg,
-    #5f86e0 310deg,
-    #7fe3d4 345deg,
-    #ffffff 356deg,
+    transparent 0deg 250deg,
+    rgba(143, 174, 236, 0.35) 300deg,
+    #8faeec 345deg,
     transparent 360deg
   );
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -282,7 +280,7 @@ b, strong { font-weight: 600; }
   pointer-events: none;
   z-index: 2;
 }
-.laser::after { filter: blur(10px); opacity: 1; inset: -3px; padding: 5px; }
+.laser::after { filter: blur(4px); opacity: 0.5; inset: -2px; padding: 2px; }
 .laser-slow::before, .laser-slow::after { animation-duration: 7s; }
 @keyframes laser { to { --laser-angle: 360deg; } }
 @media (prefers-reduced-motion: reduce) {
