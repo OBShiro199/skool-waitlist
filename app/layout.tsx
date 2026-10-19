@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import { GeistSans } from 'geist/font/sans'
 import { Analytics } from '@vercel/analytics/next'
 import { SiteProvider } from '@/components/ui/SiteProvider'
@@ -33,6 +34,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </SiteProvider>
         <Analytics />
+        <Script
+          src="https://datafa.st/js/script.js"
+          data-website-id="dfid_fFdHARFOxn0u70FcFtZv7"
+          data-domain="buildsoftwaresolo.com"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )
