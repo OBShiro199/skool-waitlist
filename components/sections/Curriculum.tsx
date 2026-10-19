@@ -26,13 +26,13 @@ export function Curriculum() {
 
   return (
     <section id="curriculum" className="section">
-      <Eyebrow idx="03">Curriculum</Eyebrow>
+      <Eyebrow idx="02">Curriculum</Eyebrow>
       <h2 className="mt-3 text-24 md:text-32">
         <span className="num">5</span> weeks · <span className="num">40</span> lessons · <span className="num">7</span> guides
       </h2>
 
       {/* desktop: five columns */}
-      <div className="mt-10 hidden grid-cols-5 border border-hairline lg:grid">
+      <div className="laser laser-slow mt-10 hidden grid-cols-5 border border-hairline lg:grid">
         {weeks.map((w) => (
           <div key={w.n} className="border-hairline px-4 pb-2 pt-4 [&:not(:last-child)]:border-r">
             <p className="num text-13 text-faint">Week {w.n}</p>
@@ -46,7 +46,7 @@ export function Curriculum() {
       </div>
 
       {/* tablet and mobile: accordion */}
-      <div className="mt-8 border border-hairline lg:hidden">
+      <div className="laser laser-slow mt-8 border border-hairline lg:hidden">
         {weeks.map((w) => {
           const isOpen = open === w.n
           return (

@@ -29,7 +29,7 @@ export function Inside() {
   return (
     <section id="inside" className="border-t border-hairline">
       <div className="px-4 pb-10 pt-14 md:px-8 md:pt-20">
-        <Eyebrow idx="02">What&apos;s inside</Eyebrow>
+        <Eyebrow idx="03">What&apos;s inside</Eyebrow>
         <h2 className="mt-3 text-24 md:text-32">Everything unlocks the day doors open.</h2>
         <p className="mt-3 max-w-[60ch] text-16 text-muted">
           No drip-feed and no upsells. Everything below is there on day one, and the live build adds to it every week.

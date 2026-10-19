@@ -2,12 +2,14 @@ import { offer } from '@/content/offer'
 import { WaitlistForm } from '@/components/ui/WaitlistForm'
 import Image from 'next/image'
 import { Check } from 'lucide-react'
+import { AsciiField } from '@/components/ui/AsciiField'
 
 export function Hero() {
   return (
-    <section id="top" className="px-4 pt-14 md:px-8 md:pt-20">
-      <div className="mx-auto flex max-w-[720px] flex-col items-center text-center">
-        <div className="w-full max-w-[320px] rounded-box border border-blue-edge bg-blue-soft px-3 py-2.5 text-left">
+    <section id="top" className="relative overflow-hidden px-4 pt-14 md:px-8 md:pt-20">
+      <AsciiField className="absolute inset-x-0 top-0 h-[640px] w-full" />
+      <div className="relative mx-auto flex max-w-[720px] flex-col items-center text-center">
+        <div className="laser laser-slow w-full max-w-[320px] rounded-box border border-blue-edge bg-blue-soft px-3 py-2.5 text-left">
           <div className="flex items-center justify-between text-13">
             <span className="flex items-center gap-2 font-medium text-ink">
               <span className="live-dot" aria-hidden />
@@ -44,7 +46,7 @@ export function Hero() {
         <p className="mt-4 text-13 text-faint">
           From {offer.host}: {offer.products} software products built and sold, {offer.clients}+ paying clients.
         </p>
-        <div id="join" className="mt-8 w-full max-w-[520px] border border-hairline bg-surface p-5 text-left md:p-6">
+        <div id="join" className="laser mt-8 w-full max-w-[520px] border border-hairline bg-surface p-5 text-left md:p-6">
           <div className="mb-3 flex items-center justify-between text-13">
             <span className="font-medium text-ink">Join the waitlist</span>
             <span className="text-faint">{offer.foundingSeats} founding spots</span>
@@ -52,9 +54,9 @@ export function Hero() {
           <WaitlistForm location="hero" inputId="email-hero" />
         </div>
       </div>
-      <figure className="hero-scene mx-auto mt-14 max-w-[1040px] overflow-hidden rounded-t-box px-4 pt-4 sm:px-8 sm:pt-8 md:px-12 md:pt-12">
+      <figure className="hero-scene relative mx-auto mt-14 max-w-[1040px] overflow-hidden rounded-t-box px-4 pt-4 sm:px-8 sm:pt-8 md:px-12 md:pt-12">
         {/* the image runs off the bottom edge: its lower part is cropped */}
-        <div className="aspect-[2000/860] overflow-hidden rounded-t-box shadow-[0_24px_60px_rgba(8,9,10,0.35),0_8px_20px_rgba(8,9,10,0.18),0_0_0_1px_rgba(8,9,10,0.06)]">
+        <div className="aspect-[2000/960] overflow-hidden rounded-t-box shadow-[0_24px_60px_rgba(8,9,10,0.35),0_8px_20px_rgba(8,9,10,0.18),0_0_0_1px_rgba(8,9,10,0.06)]">
         <Image
           src="/hero.webp"
           alt="Start a profitable app and get 10 paying customers: from idea to paying customers in 5 weeks, no coding needed. Olly, with a rising revenue chart."

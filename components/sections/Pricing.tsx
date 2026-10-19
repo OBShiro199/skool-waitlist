@@ -16,7 +16,7 @@ export function Pricing() {
           Founding members pay {foundingBothLabel}, locked for as long as they stay.
         </p>
       </div>
-      <div className="mx-auto mt-10 grid max-w-[960px] border border-hairline md:grid-cols-2">
+      <div className="laser laser-slow mx-auto mt-10 grid max-w-[960px] border border-hairline bg-surface md:grid-cols-2">
         <div className="border-hairline p-5 max-md:border-b md:border-r md:p-8">
           <div className="flex items-center justify-between gap-2">
             <span className="text-13 font-medium text-ink">Founding membership</span>

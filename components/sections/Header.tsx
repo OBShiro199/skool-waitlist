@@ -7,8 +7,8 @@ import { useSite } from '@/components/ui/SiteProvider'
 
 const links = [
   ['Reviews', '#reviews'],
-  ['What’s inside', '#inside'],
   ['Curriculum', '#curriculum'],
+  ['What’s inside', '#inside'],
   ['Pricing', '#pricing'],
   ['FAQ', '#faq'],
 ] as const

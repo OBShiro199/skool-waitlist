@@ -250,3 +250,41 @@ b, strong { font-weight: 600; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .rise > * { opacity: 1; transform: none; }
 }
+
+/* ---------- lasers: a bright arc that circles an element's border ---------- */
+@property --laser-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.laser { position: relative; isolation: isolate; }
+.laser::before,
+.laser::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--laser-angle),
+    transparent 0deg 200deg,
+    rgba(95, 134, 224, 0.25) 250deg,
+    #5f86e0 310deg,
+    #7fe3d4 345deg,
+    #ffffff 356deg,
+    transparent 360deg
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: laser 4.5s linear infinite;
+  animation-delay: var(--laser-delay, 0s);
+  pointer-events: none;
+  z-index: 2;
+}
+.laser::after { filter: blur(10px); opacity: 1; inset: -3px; padding: 5px; }
+.laser-slow::before, .laser-slow::after { animation-duration: 7s; }
+@keyframes laser { to { --laser-angle: 360deg; } }
+@media (prefers-reduced-motion: reduce) {
+  .laser::before, .laser::after { display: none; }
+}

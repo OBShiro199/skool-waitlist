@@ -33,9 +33,9 @@ export default function Page() {
         <Hero />
         <Numbers />
         <Wall />
+        <Curriculum />
         <Inside />
         <CtaBand label="Don't miss the doors" title={`Waitlist members get in first, at ${usd(offer.foundingMonthly)}/month.`} location="inside" />
-        <Curriculum />
         <Pricing />
         <Faq />
         <StillDeciding />
