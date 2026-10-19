@@ -5,7 +5,7 @@ import { Check } from 'lucide-react'
 
 export function Hero() {
   return (
-    <section id="top" className="px-4 pb-14 pt-14 md:px-8 md:pb-20 md:pt-20">
+    <section id="top" className="px-4 pt-14 md:px-8 md:pt-20">
       <div className="mx-auto flex max-w-[720px] flex-col items-center text-center">
         <div className="w-full max-w-[320px] rounded-box border border-blue-edge bg-blue-soft px-3 py-2.5 text-left">
           <div className="flex items-center justify-between text-13">
@@ -52,7 +52,9 @@ export function Hero() {
           <WaitlistForm location="hero" inputId="email-hero" />
         </div>
       </div>
-      <figure className="hero-scene mx-auto mt-14 max-w-[1040px] overflow-hidden rounded-box p-4 sm:p-8 md:p-12">
+      <figure className="hero-scene mx-auto mt-14 max-w-[1040px] overflow-hidden rounded-t-box px-4 pt-4 sm:px-8 sm:pt-8 md:px-12 md:pt-12">
+        {/* the image runs off the bottom edge: its lower part is cropped */}
+        <div className="aspect-[2000/860] overflow-hidden rounded-t-box shadow-[0_24px_60px_rgba(8,9,10,0.35),0_8px_20px_rgba(8,9,10,0.18),0_0_0_1px_rgba(8,9,10,0.06)]">
         <Image
           src="/hero.webp"
           alt="Start a profitable app and get 10 paying customers: from idea to paying customers in 5 weeks, no coding needed. Olly, with a rising revenue chart."
@@ -60,8 +62,9 @@ export function Hero() {
           height={1062}
           priority
           sizes="(min-width: 1104px) 1040px, calc(100vw - 32px)"
-          className="block h-auto w-full rounded-box shadow-[0_24px_60px_rgba(8,9,10,0.35),0_8px_20px_rgba(8,9,10,0.18),0_0_0_1px_rgba(8,9,10,0.06)]"
+          className="block h-auto w-full"
         />
+        </div>
       </figure>
     </section>
   )

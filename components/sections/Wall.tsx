@@ -28,7 +28,9 @@ function Card({ r, hidden }: { r: (typeof reviews)[number]; hidden?: boolean }) 
   )
 }
 
-/** Scrolls on its own; pauses on hover or focus; a still, swipeable row with reduced motion. */
+const rows = [reviews.slice(0, 8), reviews.slice(8)]
+
+/** Two rows scrolling in opposite directions; still, swipeable rows with reduced motion. */
 export function Wall() {
   return (
     <section id="reviews" className="border-t border-hairline py-14 md:py-20">
@@ -43,15 +45,19 @@ export function Wall() {
           .
         </p>
       </div>
-      <div className="marquee-wrap mt-10 overflow-hidden" role="region" aria-label="Viewer comments" tabIndex={0}>
-        <div className="marquee">
-          {reviews.map((r, i) => (
-            <Card key={i} r={r} />
-          ))}
-          {reviews.map((r, i) => (
-            <Card key={`copy-${i}`} r={r} hidden />
-          ))}
-        </div>
+      <div className="mt-10 flex flex-col gap-4" role="region" aria-label="Viewer comments">
+        {rows.map((row, n) => (
+          <div key={n} className="marquee-wrap overflow-hidden">
+            <div className={`marquee ${n === 1 ? 'marquee-reverse' : ''}`}>
+              {row.map((r, i) => (
+                <Card key={i} r={r} />
+              ))}
+              {row.map((r, i) => (
+                <Card key={`copy-${i}`} r={r} hidden />
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   )

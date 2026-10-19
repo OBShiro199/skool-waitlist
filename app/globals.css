@@ -228,8 +228,8 @@ b, strong { font-weight: 600; }
 }
 
 /* reviews marquee: the second copy of the cards makes the loop seamless */
-.marquee { display: flex; width: max-content; gap: 16px; animation: marquee 80s linear infinite; }
-.marquee-wrap:hover .marquee, .marquee-wrap:focus-within .marquee { animation-play-state: paused; }
+.marquee { display: flex; width: max-content; gap: 16px; animation: marquee 70s linear infinite; }
+.marquee-reverse { animation-direction: reverse; }
 @keyframes marquee { to { transform: translateX(calc(-50% - 8px)); } }
 .marquee-wrap { mask-image: linear-gradient(90deg, transparent, #000 48px, #000 calc(100% - 48px), transparent); }
 @media (prefers-reduced-motion: reduce) {
