@@ -1,4 +1,4 @@
-import { offer } from '@/content/offer'
+import { offer, usd } from '@/content/offer'
 import { WaitlistForm } from '@/components/ui/WaitlistForm'
 import Image from 'next/image'
 import { Check } from 'lucide-react'
@@ -17,13 +17,8 @@ export function Hero() {
               <img src="/logos/skool.png" alt="Skool" width={50} height={16} className="h-4 w-auto" />
               community
             </span>
-            <span className="num flex items-center gap-2 text-muted">
-              <span className="live-dot" aria-hidden />
-              <span className="font-medium text-ink">First {offer.earlySlots}</span>
-              <span aria-hidden>·</span>
-              <span>
-                <span className="text-ink">{offer.earlySlotsTaken}</span>/{offer.earlySlots} taken
-              </span>
+            <span className="num text-muted">
+              <span className="text-ink">{offer.earlySlotsTaken}</span>/{offer.earlySlots} taken
             </span>
           </div>
           <div
@@ -36,6 +31,13 @@ export function Hero() {
           >
             <div className="h-full rounded-full bg-blue" style={{ width: `${(offer.earlySlotsTaken / offer.earlySlots) * 100}%` }} />
           </div>
+          <p className="num mt-2.5 flex items-center gap-2 text-13 text-muted">
+            <span className="live-dot" aria-hidden />
+            <span>
+              <span className="font-medium text-ink">First {offer.earlySlots} early birds:</span> {usd(offer.foundingMonthly)}/month instead of{' '}
+              <s>{usd(offer.monthlyPrice)}</s>
+            </span>
+          </p>
         </div>
         <h1 className="mt-7 text-32 md:text-48">Build and sell a profitable SaaS with AI. Watch me do it live.</h1>
         <p className="mt-5 max-w-[60ch] text-16 text-body">

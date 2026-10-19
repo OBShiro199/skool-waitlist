@@ -17,7 +17,7 @@ export const offer = {
   earlySlotsTaken: 7,
   foundingMonthly: 49,
   foundingAnnual: 397,
-  monthlyPrice: 97,
+  monthlyPrice: 99,
   annualPrice: 776,
   leadsLabel: '10M+',
   leadExportsPerMonth: 5000,
