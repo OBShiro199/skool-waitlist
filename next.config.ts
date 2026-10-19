@@ -1,16 +1,7 @@
 import type { NextConfig } from 'next'
 
-const nextConfig: NextConfig = {
-  async redirects() {
-    return [
-      {
-        source: '/:path*',
-        has: [{ type: 'host', value: 'www.buildsoftwaresolo.com' }],
-        destination: 'https://buildsoftwaresolo.com/:path*',
-        permanent: true,
-      },
-    ]
-  },
-}
+// www ↔ apex redirects are handled in Vercel's Domains settings, not here,
+// so the two can never point at each other and loop.
+const nextConfig: NextConfig = {}
 
 export default nextConfig
