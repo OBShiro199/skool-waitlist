@@ -8,9 +8,9 @@ import { useSite } from '@/components/ui/SiteProvider'
 const links = [
   ['What’s inside', '#inside'],
   ['Curriculum', '#curriculum'],
-  ['Reviews', '#reviews'],
   ['Pricing', '#pricing'],
   ['FAQ', '#faq'],
+  ['Reviews', '#reviews'],
 ] as const
 
 export function focusJoin() {

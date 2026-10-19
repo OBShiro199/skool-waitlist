@@ -1,7 +1,6 @@
 import { Header } from '@/components/sections/Header'
 import { Hero } from '@/components/sections/Hero'
 import { Numbers } from '@/components/sections/Numbers'
-import { Channel } from '@/components/sections/Channel'
 import { Inside } from '@/components/sections/Inside'
 import { CtaBand } from '@/components/sections/CtaBand'
 import { Curriculum } from '@/components/sections/Curriculum'
@@ -33,13 +32,12 @@ export default function Page() {
       <main id="main" className="rail">
         <Hero />
         <Numbers />
-        <Channel />
         <Inside />
         <CtaBand label="Don't miss the doors" title={`Waitlist members get in first, at ${usd(offer.foundingMonthly)}/month.`} location="inside" />
         <Curriculum />
-        <Wall />
         <Pricing />
         <Faq />
+        <Wall />
         <StillDeciding />
         <FinalCta />
         <Footer />
