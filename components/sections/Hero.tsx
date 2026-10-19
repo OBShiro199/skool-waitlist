@@ -27,7 +27,7 @@ export function Hero() {
             </span>
           </div>
           <div
-            className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-white"
+            className="mt-2.5 h-[3px] overflow-hidden rounded-full bg-white"
             role="progressbar"
             aria-label={`${offer.earlySlotsTaken} of ${offer.earlySlots} slots taken`}
             aria-valuemin={0}
