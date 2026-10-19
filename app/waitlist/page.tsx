@@ -114,10 +114,10 @@ export default async function WaitlistAdmin() {
           <p className="mt-8 text-14 text-muted">No signups yet. They&apos;ll appear here as people join.</p>
         ) : (
           <div className="mt-8 overflow-x-auto border border-hairline">
-            <table className="w-full min-w-[880px] text-left text-13">
+            <table className="w-full min-w-[980px] text-left text-13">
               <thead className="text-faint">
                 <tr className="h-9 border-b border-hairline">
-                  {['#', 'Email', 'Name', 'Stage', 'Form', 'Source', 'Campaign', 'Country', 'Joined'].map((h) => (
+                  {['#', 'Email', 'Name', 'Stage', 'Form', 'Source', 'Campaign', 'Country', 'Confirmation', 'Joined'].map((h) => (
                     <th key={h} className="px-3 font-normal">
                       {h}
                     </th>
@@ -135,6 +135,9 @@ export default async function WaitlistAdmin() {
                     <td className="px-3 text-muted">{r.ref || r.utm_source || <span className="text-ghost">direct</span>}</td>
                     <td className="px-3 text-muted">{r.utm_campaign || <span className="text-ghost">–</span>}</td>
                     <td className="px-3 text-muted">{r.country || <span className="text-ghost">–</span>}</td>
+                    <td className="px-3">
+                      {r.confirmation_sent_at ? <span className="tag tag-green">Sent</span> : <span className="tag tag-rose">Not sent</span>}
+                    </td>
                     <td className="num whitespace-nowrap px-3 text-muted">{fmt.format(new Date(r.created_at))}</td>
                   </tr>
                 ))}
