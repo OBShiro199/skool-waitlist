@@ -17,6 +17,9 @@ export function ThanksHero() {
     // celebrate once, right after joining
     if (!j.exists && Date.now() - j.at < 15000) {
       setTimeout(() => confetti(innerWidth / 2, innerHeight * 0.35), 150)
+      // DataFast conversion: once per signup, never on refresh or a return visit
+      const w = window as unknown as { datafast?: (goal: string) => void }
+      w.datafast?.('waitlist_signup')
       try {
         sessionStorage.setItem('joined', JSON.stringify({ ...j, at: 0 }))
       } catch {}

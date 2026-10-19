@@ -34,6 +34,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           {children}
         </SiteProvider>
         <Analytics />
+        {/* queues goals fired before the DataFast script has loaded */}
+        <Script id="datafast-queue" strategy="beforeInteractive">
+          {`window.datafast = window.datafast || function () { (window.datafast.q = window.datafast.q || []).push(arguments) }`}
+        </Script>
         <Script
           src="https://datafa.st/js/script.js"
           data-website-id="dfid_fFdHARFOxn0u70FcFtZv7"
