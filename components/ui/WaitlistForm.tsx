@@ -43,7 +43,7 @@ export function WaitlistForm({ location, inputId }: { location: string; inputId?
           className="btn btn-primary btn-lg min-w-60"
           onClick={() => track('cta_click', { location, phase })}
         >
-          <span className="btn-label">{open ? `Join now: ${usd(offer.foundingPrice)}/year` : 'Join the community'}</span>
+          <span className="btn-label">{open ? `Join now: ${usd(offer.foundingMonthly)}/month` : 'Join the community'}</span>
         </a>
         <p className="text-13 text-faint">
           {open

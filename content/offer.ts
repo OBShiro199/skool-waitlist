@@ -15,9 +15,11 @@ export const offer = {
   /** Hero progress bar. Update by hand so it always matches real numbers. */
   earlySlots: 20,
   earlySlotsTaken: 7,
-  foundingPrice: 397,
+  foundingMonthly: 49,
+  foundingAnnual: 397,
   monthlyPrice: 97,
   annualPrice: 776,
+  leadsLabel: '10M+',
   leadExportsPerMonth: 5000,
   callTime: '5pm UK',
   callLength: '1 hour',
@@ -25,10 +27,11 @@ export const offer = {
   clients: 500,
 } as const
 
-export const foundingSaving = offer.annualPrice - offer.foundingPrice
-export const foundingPerMonth = Math.round(offer.foundingPrice / 12)
-
 export const usd = (n: number) => `$${n.toLocaleString('en-US')}`
+
+/** The default way the founding price is shown: monthly. */
+export const foundingPriceLabel = `${usd(offer.foundingMonthly)}/month`
+export const foundingBothLabel = `${usd(offer.foundingMonthly)}/month or ${usd(offer.foundingAnnual)}/year`
 
 export const included = [
   { title: 'Watch me build a SaaS to $10K/month', detail: 'every cold email, call, sales call, ad and churn save, as it happens' },

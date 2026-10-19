@@ -36,11 +36,11 @@ export function Header() {
         <div className="flex h-9 items-center justify-center gap-2 border-b border-hairline px-4 text-13 text-muted">
           <span className="truncate">
             {phase === 'open' ? (
-              <>Doors are open. Founding price {usd(offer.foundingPrice)}/year for the first {offer.foundingSeats} members.</>
+              <>Doors are open. Founding price {usd(offer.foundingMonthly)}/month for the first {offer.foundingSeats} members.</>
             ) : (
               <>
                 <span className="max-sm:hidden">Founding price: </span>
-                {usd(offer.foundingPrice)}/year for the first {offer.foundingSeats} members
+                {usd(offer.foundingMonthly)}/month for the first {offer.foundingSeats} members
                 <span className="max-sm:hidden">. Waitlist gets in first</span>.
               </>
             )}

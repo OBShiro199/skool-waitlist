@@ -35,7 +35,7 @@ export default function Page() {
         <Numbers />
         <Channel />
         <Inside />
-        <CtaBand label="Don't miss the doors" title={`Waitlist members get in first, at ${usd(offer.foundingPrice)}/year.`} location="inside" />
+        <CtaBand label="Don't miss the doors" title={`Waitlist members get in first, at ${usd(offer.foundingMonthly)}/month.`} location="inside" />
         <Curriculum />
         <Wall />
         <Pricing />

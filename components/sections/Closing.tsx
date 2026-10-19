@@ -24,7 +24,7 @@ export function FinalCta() {
       <div>
         <h2 className="text-24 md:text-32">Get on the waitlist. Leave whenever you want.</h2>
         <p className="mt-3 max-w-[50ch] text-16 text-muted">
-          First in line when doors open, at {usd(offer.foundingPrice)}/year instead of {usd(offer.annualPrice)}, locked for as long as you
+          First in line when doors open, at {usd(offer.foundingMonthly)}/month instead of {usd(offer.monthlyPrice)}, locked for as long as you
           stay. Cancel anytime, 30-day money-back guarantee.
         </p>
         <div className="mt-6">

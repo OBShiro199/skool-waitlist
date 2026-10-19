@@ -17,7 +17,7 @@ export default function OgImage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
             <div style={{ fontSize: 26, color: '#62666d' }}>
-              {`Founding price ${usd(offer.foundingPrice)}/year · first ${offer.foundingSeats} members`}
+              {`Founding price ${usd(offer.foundingMonthly)}/month · first ${offer.foundingSeats} members`}
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6 }}>
               {steps.map((s) => (

@@ -39,7 +39,7 @@ export const faq = [
   {
     id: 'price',
     q: 'What does it cost after launch?',
-    a: `${usd(offer.monthlyPrice)}/month or ${usd(offer.annualPrice)}/year. Founding members pay ${usd(offer.foundingPrice)}/year and keep that price for as long as they stay.`,
+    a: `${usd(offer.monthlyPrice)}/month or ${usd(offer.annualPrice)}/year. Founding members pay ${usd(offer.foundingMonthly)}/month or ${usd(offer.foundingAnnual)}/year and keep that price for as long as they stay.`,
   },
   {
     id: 'cancel',

@@ -7,7 +7,7 @@ const from = process.env.EMAIL_FROM ?? `Olly <${offer.contactEmail}>`
 
 const text = `You're on the waitlist for ${offer.name}.
 
-Founding members pay ${usd(offer.foundingPrice)}/year instead of ${usd(offer.annualPrice)}, and keep that price for as long as they stay. There are only ${offer.foundingSeats} founding spots, for ${offer.foundingDays} days. I'll email you before doors open and again the moment they do.
+Founding members pay ${usd(offer.foundingMonthly)}/month (or ${usd(offer.foundingAnnual)}/year) instead of ${usd(offer.monthlyPrice)}/month, and keep that price for as long as they stay. There are only ${offer.foundingSeats} founding spots, for ${offer.foundingDays} days. I'll email you before doors open and again the moment they do.
 
 Until then, hit reply and tell me what you're building (or want to build). I read every one.
 

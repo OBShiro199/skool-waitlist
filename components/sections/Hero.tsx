@@ -1,6 +1,7 @@
 import { offer } from '@/content/offer'
 import { WaitlistForm } from '@/components/ui/WaitlistForm'
 import Image from 'next/image'
+import { Check } from 'lucide-react'
 
 export function Hero() {
   return (
@@ -29,8 +30,19 @@ export function Hero() {
         </div>
         <h1 className="mt-6 text-32 md:text-48">Build and sell a profitable SaaS with AI. Watch me do it live.</h1>
         <p className="mt-5 max-w-[60ch] text-16 text-body">
-          I&apos;ve built and sold {offer.products} software products, with {offer.clients}+ paying clients across them. Now I&apos;m
-          building my next SaaS to $10K/month, in private, and you get to watch every move.
+          Get your first 10 paying customers or your money back. You get {offer.leadsLabel} verified B2B leads, a 40-lesson course
+          from idea to exit, daily live calls, and a front-row seat while I build my next SaaS to $10K/month.
+        </p>
+        <ul className="mt-6 flex flex-wrap justify-center gap-x-5 gap-y-2 text-14 text-ink">
+          {['First 10 customers or a full refund', `${offer.leadsLabel} verified leads`, '40 lessons + daily calls'].map((t) => (
+            <li key={t} className="flex items-center gap-2">
+              <Check size={16} strokeWidth={2} className="text-success" aria-hidden />
+              {t}
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4 text-13 text-faint">
+          From {offer.host}: {offer.products} software products built and sold, {offer.clients}+ paying clients.
         </p>
         <div id="join" className="mt-8 w-full max-w-[520px] border border-hairline bg-surface p-5 text-left md:p-6">
           <div className="mb-3 flex items-center justify-between text-13">

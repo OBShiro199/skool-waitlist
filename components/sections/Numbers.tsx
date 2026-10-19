@@ -4,7 +4,7 @@ const cells = [
   ['40', 'lessons across 5 weeks'],
   ['10M+', 'verified B2B leads'],
   ['20', 'apps ready to clone'],
-  [usd(offer.foundingPrice), 'per year, founding members'],
+  [usd(offer.foundingMonthly), 'per month, founding members'],
 ] as const
 
 export function Numbers() {

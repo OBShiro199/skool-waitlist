@@ -48,7 +48,7 @@ export function MobileBar() {
       }`}
       aria-hidden={!show}
     >
-      <span className="text-13 text-ink">Founding price {usd(offer.foundingPrice)}/year</span>
+      <span className="text-13 text-ink">Founding price {usd(offer.foundingMonthly)}/month</span>
       <button type="button" className="btn btn-primary btn-sm" onClick={go} tabIndex={show ? 0 : -1}>
         {phase === 'waitlist' ? 'Join' : 'Join now'}
       </button>

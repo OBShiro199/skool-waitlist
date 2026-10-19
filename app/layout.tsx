@@ -7,7 +7,7 @@ import { offer } from '@/content/offer'
 import './globals.css'
 
 const description =
-  'Watch a SaaS get built live to $10K/month, then build your own with AI. 40 lessons, daily calls, 10M+ leads. Founding price $397/year for the first 100.'
+  'Watch a SaaS get built live to $10K/month, then build your own with AI. 40 lessons, daily calls, 10M+ leads. Founding price $49/month for the first 100.'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://buildsoftwaresolo.com'),
