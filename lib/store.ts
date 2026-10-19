@@ -21,12 +21,11 @@ export type Signup = {
 
 export type Profile = { first_name: string | null; stage: 'idea' | 'building' | 'launched' | null }
 
+// The server writes with the secret key (sb_secret_…), never the publishable one, so the table can stay fully locked.
+const supabaseUrl = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseSecret = process.env.SUPABASE_SECRET_KEY ?? process.env.SUPABASE_SERVICE_ROLE_KEY
 const supabase =
-  process.env.SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY
-    ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
-        auth: { persistSession: false },
-      })
-    : null
+  supabaseUrl && supabaseSecret ? createClient(supabaseUrl, supabaseSecret, { auth: { persistSession: false } }) : null
 
 export const usingLocalStore = !supabase
 
