@@ -9,18 +9,25 @@ export function Hero() {
     <section id="top" className="relative overflow-hidden px-4 pt-14 md:px-8 md:pt-20">
       <AsciiField className="absolute inset-x-0 top-0 h-[640px] w-full" />
       <div className="relative mx-auto flex max-w-[720px] flex-col items-center text-center">
-        <div className="laser laser-slow w-full max-w-[320px] rounded-box border border-blue-edge bg-blue-soft px-3 py-2.5 text-left">
-          <div className="flex items-center justify-between text-13">
-            <span className="flex items-center gap-2 font-medium text-ink">
-              <span className="live-dot" aria-hidden />
-              First {offer.earlySlots}
+        <div className="laser laser-slow w-full max-w-[440px] rounded-box border border-blue-edge bg-blue-soft px-4 py-3 text-left">
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 text-13">
+            <span className="flex items-center gap-1.5 text-muted">
+              A private
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logos/skool.png" alt="Skool" width={50} height={16} className="h-4 w-auto" />
+              community
             </span>
-            <span className="num text-muted">
-              <span className="text-ink">{offer.earlySlotsTaken}</span>/{offer.earlySlots} slots taken
+            <span className="num flex items-center gap-2 text-muted">
+              <span className="live-dot" aria-hidden />
+              <span className="font-medium text-ink">First {offer.earlySlots}</span>
+              <span aria-hidden>·</span>
+              <span>
+                <span className="text-ink">{offer.earlySlotsTaken}</span>/{offer.earlySlots} taken
+              </span>
             </span>
           </div>
           <div
-            className="mt-2 h-1.5 overflow-hidden rounded-full bg-white"
+            className="mt-2.5 h-1.5 overflow-hidden rounded-full bg-white"
             role="progressbar"
             aria-label={`${offer.earlySlotsTaken} of ${offer.earlySlots} slots taken`}
             aria-valuemin={0}
@@ -30,13 +37,7 @@ export function Hero() {
             <div className="h-full rounded-full bg-blue" style={{ width: `${(offer.earlySlotsTaken / offer.earlySlots) * 100}%` }} />
           </div>
         </div>
-        <p className="mt-5 inline-flex h-8 items-center gap-2 rounded-full border border-hairline bg-surface px-3 text-13 text-muted">
-          A private
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logos/skool.png" alt="Skool" width={50} height={16} className="h-4 w-auto" />
-          community
-        </p>
-        <h1 className="mt-4 text-32 md:text-48">Build and sell a profitable SaaS with AI. Watch me do it live.</h1>
+        <h1 className="mt-7 text-32 md:text-48">Build and sell a profitable SaaS with AI. Watch me do it live.</h1>
         <p className="mt-5 max-w-[60ch] text-16 text-body">
           Get your first 10 paying customers or your money back. You get {offer.leadsLabel} verified B2B leads, a 40-lesson course
           from idea to exit, daily live calls, and a front-row seat while I build my next SaaS to $10K/month.
@@ -49,9 +50,6 @@ export function Hero() {
             </li>
           ))}
         </ul>
-        <p className="mt-4 text-13 text-faint">
-          From {offer.host}: {offer.products} software products built and sold, {offer.clients}+ paying clients.
-        </p>
         <div id="join" className="laser mt-8 w-full max-w-[520px] border border-hairline bg-surface p-5 text-left md:p-6">
           <div className="mb-3 flex items-center justify-between text-13">
             <span className="font-medium text-ink">Join the waitlist</span>
