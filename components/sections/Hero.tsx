@@ -30,7 +30,13 @@ export function Hero() {
             <div className="h-full rounded-full bg-blue" style={{ width: `${(offer.earlySlotsTaken / offer.earlySlots) * 100}%` }} />
           </div>
         </div>
-        <h1 className="mt-6 text-32 md:text-48">Build and sell a profitable SaaS with AI. Watch me do it live.</h1>
+        <p className="mt-5 inline-flex h-8 items-center gap-2 rounded-full border border-hairline bg-surface px-3 text-13 text-muted">
+          A private
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logos/skool.png" alt="Skool" width={50} height={16} className="h-4 w-auto" />
+          community
+        </p>
+        <h1 className="mt-4 text-32 md:text-48">Build and sell a profitable SaaS with AI. Watch me do it live.</h1>
         <p className="mt-5 max-w-[60ch] text-16 text-body">
           Get your first 10 paying customers or your money back. You get {offer.leadsLabel} verified B2B leads, a 40-lesson course
           from idea to exit, daily live calls, and a front-row seat while I build my next SaaS to $10K/month.
