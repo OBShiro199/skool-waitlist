@@ -219,6 +219,14 @@ b, strong { font-weight: 600; }
 }
 .rise.seen > * { opacity: 1; transform: none; }
 
+/* hero image sits on the landscape; the gradient shows until public/hero-bg.webp exists */
+.hero-scene {
+  background-color: #1f7fa3;
+  background-image: url('/hero-bg.webp'), linear-gradient(180deg, #13739b 0%, #3a9bb5 45%, #2f8f6a 75%, #4f9a3c 100%);
+  background-size: cover, cover;
+  background-position: center;
+}
+
 /* height morph used by accordions and the form */
 .morph { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 300ms var(--ease-morph); }
 .morph[data-open='true'] { grid-template-rows: 1fr; }

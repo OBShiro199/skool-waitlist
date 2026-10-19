@@ -1,6 +1,6 @@
 import { offer } from '@/content/offer'
 import { WaitlistForm } from '@/components/ui/WaitlistForm'
-import { HeroMock } from './HeroMock'
+import Image from 'next/image'
 
 export function Hero() {
   return (
@@ -23,7 +23,17 @@ export function Hero() {
           <WaitlistForm location="hero" inputId="email-hero" />
         </div>
       </div>
-      <HeroMock />
+      <figure className="hero-scene mx-auto mt-14 max-w-[1040px] overflow-hidden rounded-box p-4 sm:p-8 md:p-12">
+        <Image
+          src="/hero.webp"
+          alt="Start a profitable app and get 10 paying customers: from idea to paying customers in 5 weeks, no coding needed. Olly, with a rising revenue chart."
+          width={2000}
+          height={1062}
+          priority
+          sizes="(min-width: 1104px) 1040px, calc(100vw - 32px)"
+          className="block h-auto w-full rounded-box shadow-[0_24px_60px_rgba(8,9,10,0.35),0_8px_20px_rgba(8,9,10,0.18),0_0_0_1px_rgba(8,9,10,0.06)]"
+        />
+      </figure>
     </section>
   )
 }
