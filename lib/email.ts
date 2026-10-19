@@ -4,7 +4,8 @@ import { offer } from '@/content/offer'
 import { confirmationHtml, confirmationSubject, confirmationText } from '@/emails/confirmation'
 
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
-const from = process.env.EMAIL_FROM ?? `Olly <${offer.contactEmail}>`
+// Sent from the subdomain verified in Resend; replies go to the main address.
+const from = process.env.EMAIL_FROM ?? 'Olly <olly@waitlist.buildsoftwaresolo.com>'
 
 export async function sendConfirmation(email: string) {
   const text = confirmationText()
