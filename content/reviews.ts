@@ -15,7 +15,6 @@ export const tagHue: Record<ReviewTag, 'blue' | 'teal' | 'amber' | 'green' | 'ro
 export const avatars: Record<string, string> = {
   'uv-rayss': '/avatars/uv-rayss.webp',
   'untalked': '/avatars/untalked.webp',
-  'timsh0e03': '/avatars/timsh0e03.webp',
   'ta-prgmr': '/avatars/ta-prgmr.webp',
   'SugSean': '/avatars/SugSean.webp',
   'ramsyrama': '/avatars/ramsyrama.webp',
@@ -38,6 +37,5 @@ export const reviews: { handle: string; tag: ReviewTag; text: string }[] = [
   { handle: 'ta-prgmr', tag: 'Quality', text: 'This was so insightful !! Thanks for sharing man' },
   { handle: 'Frank_learns', tag: 'Already bought', text: 'Very inspiring! Just purchased your course!' },
   { handle: 'Dr_Asif_Khan', tag: 'Trust', text: 'Love this guy and the sound advice here' },
-  { handle: 'timsh0e03', tag: 'Quality', text: 'Absolute genius ideas. Why are you giving these out for free?' },
   { handle: 'Hendrix312002', tag: 'Consistency', text: 'Super solid as always. Thank you' },
 ]
