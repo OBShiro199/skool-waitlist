@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { offer } from '@/content/offer'
+import { offer, usd } from '@/content/offer'
 import { Logo } from '@/components/ui/Logo'
 import { useSite } from '@/components/ui/SiteProvider'
 
@@ -33,6 +33,17 @@ export function Header() {
 
   return (
     <>
+      {phase === 'waitlist' && (
+        <div className="flex h-9 items-center justify-center gap-2 border-b border-hairline px-4 text-13 text-muted">
+          <span className="truncate">
+            <span className="font-medium text-ink">First {offer.earlySlots} early birds:</span> {usd(offer.foundingMonthly)}/month instead of{' '}
+            <s>{usd(offer.monthlyPrice)}</s>
+          </span>
+          <button type="button" onClick={focusJoin} className="flex-none cursor-pointer font-medium text-ink hover:underline">
+            <span className="max-sm:hidden">Join the waitlist </span>→
+          </button>
+        </div>
+      )}
       <header
         className={`sticky top-0 z-[90] bg-surface/95 backdrop-blur transition-[border-color] duration-200 ${
           scrolled ? 'border-b border-hairline' : 'border-b border-transparent'
