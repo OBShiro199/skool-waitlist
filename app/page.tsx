@@ -32,12 +32,12 @@ export default function Page() {
       <main id="main" className="rail">
         <Hero />
         <Numbers />
+        <Wall />
         <Inside />
         <CtaBand label="Don't miss the doors" title={`Waitlist members get in first, at ${usd(offer.foundingMonthly)}/month.`} location="inside" />
         <Curriculum />
         <Pricing />
         <Faq />
-        <Wall />
         <StillDeciding />
         <FinalCta />
         <Footer />

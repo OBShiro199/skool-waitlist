@@ -6,11 +6,11 @@ import { Logo } from '@/components/ui/Logo'
 import { useSite } from '@/components/ui/SiteProvider'
 
 const links = [
+  ['Reviews', '#reviews'],
   ['What’s inside', '#inside'],
   ['Curriculum', '#curriculum'],
   ['Pricing', '#pricing'],
   ['FAQ', '#faq'],
-  ['Reviews', '#reviews'],
 ] as const
 
 export function focusJoin() {

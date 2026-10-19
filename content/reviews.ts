@@ -12,7 +12,17 @@ export const tagHue: Record<ReviewTag, 'blue' | 'teal' | 'amber' | 'green' | 'ro
 
 /** Unedited YouTube comments. Keep the wording exactly as written. */
 /** Profile photos in public/avatars, keyed by handle. Handles without one show their initial. */
-export const avatars: Record<string, string> = {}
+export const avatars: Record<string, string> = {
+  'uv-rayss': '/avatars/uv-rayss.webp',
+  'untalked': '/avatars/untalked.webp',
+  'timsh0e03': '/avatars/timsh0e03.webp',
+  'ta-prgmr': '/avatars/ta-prgmr.webp',
+  'SugSean': '/avatars/SugSean.webp',
+  'ramsyrama': '/avatars/ramsyrama.webp',
+  'osvaldodiasdossantos6625': '/avatars/osvaldodiasdossantos6625.webp',
+  'nelsonlecuane': '/avatars/nelsonlecuane.webp',
+  'Hendrix312002': '/avatars/Hendrix312002.webp',
+}
 
 export const reviews: { handle: string; tag: ReviewTag; text: string }[] = [
   { handle: 'SugSean', tag: 'Life impact', text: "Hey Olly, thank you mate. You've helped me a lot with the development of my project. I am about to launch my app. I'm really happy and proud of it." },
