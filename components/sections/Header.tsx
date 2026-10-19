@@ -8,6 +8,7 @@ import { useSite } from '@/components/ui/SiteProvider'
 const links = [
   ['Reviews', '/#reviews'],
   ['Curriculum', '/#curriculum'],
+  ['Apps', '/#apps'],
   ['What’s inside', '/#inside'],
   ['Pricing', '/#pricing'],
   ['FAQ', '/#faq'],

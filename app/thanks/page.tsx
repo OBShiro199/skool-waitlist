@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Header } from '@/components/sections/Header'
 import { Wall } from '@/components/sections/Wall'
 import { Curriculum } from '@/components/sections/Curriculum'
+import { Apps } from '@/components/sections/Apps'
 import { Footer } from '@/components/sections/Footer'
 import { offer } from '@/content/offer'
 import { ThanksHero } from './ThanksHero'
@@ -16,6 +17,7 @@ export default function Thanks() {
         <ThanksHero />
         <Wall />
         <Curriculum />
+        <Apps />
         <Footer />
       </main>
     </>

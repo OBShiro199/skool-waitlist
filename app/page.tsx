@@ -5,6 +5,7 @@ import { Inside } from '@/components/sections/Inside'
 import { CtaBand } from '@/components/sections/CtaBand'
 import { Curriculum } from '@/components/sections/Curriculum'
 import { Wall } from '@/components/sections/Wall'
+import { Apps } from '@/components/sections/Apps'
 import { Pricing } from '@/components/sections/Pricing'
 import { Faq } from '@/components/sections/Faq'
 import { FinalCta, StillDeciding } from '@/components/sections/Closing'
@@ -34,6 +35,7 @@ export default function Page() {
         <Numbers />
         <Wall />
         <Curriculum />
+        <Apps />
         <Inside />
         <CtaBand label="Don't miss the doors" title={`Waitlist members get in first, at ${usd(offer.foundingMonthly)}/month.`} location="inside" />
         <Pricing />
