@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Download, LogOut } from 'lucide-react'
+import { Download, LogOut, Mail } from 'lucide-react'
 import { adminConfigured, isAdmin } from '@/lib/admin'
 import { listSignups, usingLocalStore } from '@/lib/store'
 import { Logo } from '@/components/ui/Logo'
@@ -80,6 +80,9 @@ export default async function WaitlistAdmin() {
             {usingLocalStore && <p className="mt-1 text-13 text-warning">Local test data. Connect Supabase to see live signups.</p>}
           </div>
           <div className="flex gap-2">
+            <a href="/waitlist/email" className="btn" target="_blank" rel="noreferrer">
+              <Mail size={14} strokeWidth={1.5} aria-hidden /> Preview email
+            </a>
             <a href="/waitlist/export" className="btn">
               <Download size={14} strokeWidth={1.5} aria-hidden /> Export CSV
             </a>
