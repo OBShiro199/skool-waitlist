@@ -39,7 +39,7 @@ export function Hero() {
             </span>
           </p>
         </div>
-        <h1 className="mt-7 text-32 md:text-48">Build and sell a profitable SaaS with AI. Watch me do it live.</h1>
+        <h1 className="mt-7 text-32 md:text-48">Build a profitable <span className="whitespace-nowrap">$10K p/m SaaS</span> with AI. Watch me do it live.</h1>
         <p className="mt-5 max-w-[60ch] text-16 text-body">
           Get your first 10 paying customers or your money back. You get {offer.leadsLabel} verified B2B leads, a 40-lesson course
           from idea to exit, daily live calls, and a front-row seat while I build my next SaaS to $10K/month.

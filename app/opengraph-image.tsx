@@ -13,7 +13,7 @@ export default function OgImage() {
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', border: '1px solid #e6e6e9', padding: 64 }}>
           <div style={{ fontSize: 26, color: '#8a8f98' }}>{offer.name}</div>
           <div style={{ fontSize: 68, lineHeight: 1.05, letterSpacing: '-0.045em', color: '#08090a', maxWidth: 900 }}>
-            Build and sell a profitable SaaS with AI. Watch me do it live.
+            Build a profitable $10K p/m SaaS with AI. Watch me do it live.
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between' }}>
             <div style={{ fontSize: 26, color: '#62666d' }}>
