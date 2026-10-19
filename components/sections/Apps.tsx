@@ -2,8 +2,7 @@ import { apps, appThumbs, categoryHue, type App } from '@/content/apps'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 
 function Thumb({ app }: { app: App }) {
-  if (appThumbs.has(app.slug)) {
-    return (
+  return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
         src={`/apps/${app.slug}.webp`}
@@ -13,14 +12,31 @@ function Thumb({ app }: { app: App }) {
         loading="lazy"
         className="aspect-[8/5] w-full border-b border-hairline object-cover"
       />
-    )
-  }
-  // typeset stand-in until the thumbnail is added
+  )
+}
+
+const shown = apps.filter((a) => appThumbs.has(a.slug))
+const rest = apps.filter((a) => !appThumbs.has(a.slug))
+
+function MoreCard({ hidden }: { hidden?: boolean }) {
   return (
-    <div className="flex aspect-[8/5] w-full flex-col justify-end border-b border-hairline bg-row-hover p-5">
-      <p className="text-32 font-semibold tracking-[-0.045em] text-ink">{app.name}</p>
-      <p className="mt-1 text-14 text-muted">{app.tagline}.</p>
-    </div>
+    <article
+      aria-hidden={hidden || undefined}
+      className="flex w-[300px] flex-none flex-col justify-between rounded-box border border-blue-edge bg-blue-soft p-6 sm:w-[340px]"
+    >
+      <div>
+        <p className="num text-48 font-medium tracking-[-0.045em] text-ink">+{rest.length}</p>
+        <p className="mt-1 text-16 font-medium text-ink">more apps, unlocked instantly</p>
+        <p className="mt-2 text-13 text-muted">The moment you join, every build and launch template is yours.</p>
+      </div>
+      <ul className="mt-5 flex flex-wrap gap-1.5">
+        {rest.map((a) => (
+          <li key={a.slug} className="tag tag-blue bg-surface">
+            {a.name}
+          </li>
+        ))}
+      </ul>
+    </article>
   )
 }
 
@@ -55,7 +71,7 @@ function Card({ app, hidden }: { app: App; hidden?: boolean }) {
   )
 }
 
-/** All 20 apps drifting slowly to the left; a still, swipeable row with reduced motion. */
+/** The apps with thumbnails drift slowly left, then a card for the rest; a still, swipeable row with reduced motion. */
 export function Apps() {
   return (
     <section id="apps" className="border-t border-hairline py-14 md:py-20">
@@ -67,13 +83,15 @@ export function Apps() {
         </p>
       </div>
       <div className="marquee-wrap mt-10 overflow-hidden" role="region" aria-label="Apps you can clone">
-        <div className="marquee items-stretch" style={{ animationDuration: '160s' }}>
-          {apps.map((a) => (
+        <div className="marquee items-stretch" style={{ animationDuration: '110s' }}>
+          {shown.map((a) => (
             <Card key={a.slug} app={a} />
           ))}
-          {apps.map((a) => (
+          <MoreCard />
+          {shown.map((a) => (
             <Card key={`copy-${a.slug}`} app={a} hidden />
           ))}
+          <MoreCard hidden />
         </div>
       </div>
     </section>

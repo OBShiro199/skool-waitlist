@@ -10,8 +10,8 @@ export type App = {
   stack: string[]
 }
 
-/** Thumbnails live in public/apps/<slug>.webp. Apps without one show a typeset card. */
-export const appThumbs = new Set(['etcher', 'factorie', 'ethereel', 'conversate', 'outbounder'])
+/** Thumbnails live in public/apps/<slug>.webp. The carousel shows these; the rest are listed on a "+N more" card. */
+export const appThumbs = new Set(['etcher', 'factorie', 'ethereel', 'conversate', 'outbounder', 'signet', 'folio', 'bookwell', 'helpdeck', 'sparring'])
 
 export const apps: App[] = [
   { slug: 'etcher', name: 'Etcher', category: 'Business Tools', from: 149, tagline: 'The CRM your team calls from', description: 'A fast B2B CRM for sales teams of 2 to 20 with pipelines, CSV import and click-to-call from the browser, at one flat price for unlimited seats.', buildHours: 40, difficulty: 'Advanced', stack: ['Twilio Voice'] },
