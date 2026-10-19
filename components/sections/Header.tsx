@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { offer, usd } from '@/content/offer'
+import { offer } from '@/content/offer'
 import { Logo } from '@/components/ui/Logo'
 import { useSite } from '@/components/ui/SiteProvider'
 
@@ -33,30 +33,6 @@ export function Header() {
 
   return (
     <>
-      {phase !== 'closed' && (
-        <div className="flex h-9 items-center justify-center gap-2 border-b border-hairline px-4 text-13 text-muted">
-          <span className="truncate">
-            {phase === 'open' ? (
-              <>Doors are open. Founding price {usd(offer.foundingMonthly)}/month for the first {offer.foundingSeats} members.</>
-            ) : (
-              <>
-                <span className="max-sm:hidden">Founding price: </span>
-                {usd(offer.foundingMonthly)}/month for the first {offer.foundingSeats} members
-                <span className="max-sm:hidden">. Waitlist gets in first</span>.
-              </>
-            )}
-          </span>
-          {phase === 'open' ? (
-            <a href={offer.skoolUrl} className="flex-none font-medium text-ink hover:underline">
-              Join now →
-            </a>
-          ) : (
-            <button type="button" onClick={focusJoin} className="flex-none cursor-pointer font-medium text-ink hover:underline">
-              Join the waitlist →
-            </button>
-          )}
-        </div>
-      )}
       <header
         className={`sticky top-0 z-[90] bg-surface/95 backdrop-blur transition-[border-color] duration-200 ${
           scrolled ? 'border-b border-hairline' : 'border-b border-transparent'
