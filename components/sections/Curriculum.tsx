@@ -2,9 +2,16 @@
 
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
-import { guides, weeks } from '@/content/curriculum'
+import { weeks } from '@/content/curriculum'
 import { Eyebrow } from '@/components/ui/Eyebrow'
 import { track } from '@/lib/track'
+
+const logos = [
+  { name: 'Claude', src: '/logos/claude.png' },
+  { name: 'Supabase', src: '/logos/supabase.png' },
+  { name: 'Stripe', src: '/logos/stripe.png' },
+  { name: 'OpenAI', src: '/logos/openai.png' },
+]
 
 function Lessons({ week }: { week: (typeof weeks)[number] }) {
   return (
@@ -87,19 +94,16 @@ export function Curriculum() {
         })}
       </div>
 
-      <div className="mt-8 grid gap-6 md:grid-cols-[1fr_3fr]">
-        <div>
-          <p className="text-14 font-medium text-ink">Guides</p>
-          <p className="text-13 text-faint">The stack in depth</p>
-        </div>
-        <ol className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-3">
-          {guides.map((g, i) => (
-            <li key={g} className="flex h-9 items-center gap-3 border-b border-divider text-13">
-              <span className="num w-6 text-faint">G{i + 1}</span>
-              <span className="truncate text-body">{g}</span>
+      <div className="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+        <p className="text-14 font-medium text-ink">Plus in-depth guides for</p>
+        <ul className="flex items-center gap-3">
+          {logos.map((l) => (
+            <li key={l.src}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={l.src} alt={l.name} title={l.name} width={40} height={40} className="h-10 w-10 rounded-box" />
             </li>
           ))}
-        </ol>
+        </ul>
       </div>
       <p className="mt-6 text-13 text-faint">
         Plus: the live $10K build, daily calls Monday to Friday, unlimited Q&amp;A, 10M+ leads and 20 clone-ready apps.
