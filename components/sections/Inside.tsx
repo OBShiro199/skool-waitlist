@@ -1,4 +1,4 @@
-import { BookOpen, Database, Gift, LayoutGrid, LifeBuoy, MessageSquare, MessagesSquare, TrendingUp, Video } from 'lucide-react'
+import { BookOpen, Database, TrendingUp, Video } from 'lucide-react'
 import { offer } from '@/content/offer'
 import { weeks } from '@/content/curriculum'
 import { DotArt, stairRows } from '@/components/ui/DotArt'
@@ -133,32 +133,6 @@ export function Inside() {
         </article>
       </div>
 
-      <div className="grid border-t border-hairline sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          ['05', MessagesSquare, 'Unlimited Q&A', 'Post any question in the community. Every post answered within 24 hours, 7 days a week.'],
-          ['06', LayoutGrid, '20 apps ready to clone', 'Profitable app ideas with the build and a launch template for each. Pick one and ship.'],
-          ['07', LifeBuoy, '7 tool guides', 'Claude Code, Stripe, Supabase, Vercel, Trigger.dev, Resend and your own data API, in depth.'],
-          ['08', MessageSquare, 'Private DMs with me', 'Message me directly for your first 30 days.'],
-        ].map(([n, Icon, title, body], i) => (
-          <article
-            key={n as string}
-            className={`flex flex-col gap-3 border-hairline p-5 md:p-6 max-sm:border-b ${i < 3 ? 'lg:border-r' : ''} ${
-              i % 2 === 0 ? 'sm:border-r' : ''
-            } ${i < 2 ? 'sm:max-lg:border-b' : ''}`}
-          >
-            <CardHead n={n as string} icon={Icon as typeof Video} title={title as string} />
-            <p className="text-14">{body as string}</p>
-          </article>
-        ))}
-      </div>
-
-      <article className="flex flex-col gap-3 border-t border-hairline p-5 md:flex-row md:items-center md:gap-6 md:p-8">
-        <CardHead n="09" icon={Gift} title="Founding bonuses" />
-        <p className="flex-1 text-14">
-          My real codebases, my Claude skills and my script packs. Only for the first {offer.foundingSeats} members.
-        </p>
-        <span className="tag tag-blue self-start md:self-auto">Founding members only</span>
-      </article>
     </section>
   )
 }

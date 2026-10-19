@@ -9,7 +9,7 @@ export function Wall() {
   const [all, setAll] = useState(false)
   return (
     <section id="reviews" className="section">
-      <Eyebrow idx="05">Reviews</Eyebrow>
+      <Eyebrow idx="04">Reviews</Eyebrow>
       <h2 className="mt-3 text-24 md:text-32">What people say after watching, then doing.</h2>
       <p className="mt-3 text-16 text-muted">
         Unedited comments from my{' '}

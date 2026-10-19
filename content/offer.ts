@@ -12,6 +12,9 @@ export const offer = {
   doorsOpenAt: null as string | null,
   foundingDays: 7,
   foundingSeats: 100,
+  /** Hero progress bar. Update by hand so it always matches real numbers. */
+  earlySlots: 20,
+  earlySlotsTaken: 7,
   foundingPrice: 397,
   monthlyPrice: 97,
   annualPrice: 776,

@@ -6,10 +6,27 @@ export function Hero() {
   return (
     <section id="top" className="px-4 pb-14 pt-14 md:px-8 md:pb-20 md:pt-20">
       <div className="mx-auto flex max-w-[720px] flex-col items-center text-center">
-        <span className="tag tag-blue h-7 gap-2 px-2.5 text-13">
-          <span className="live-dot" aria-hidden />
-          Waitlist open · founding spots limited to {offer.foundingSeats}
-        </span>
+        <div className="w-full max-w-[320px] rounded-box border border-blue-edge bg-blue-soft px-3 py-2.5 text-left">
+          <div className="flex items-center justify-between text-13">
+            <span className="flex items-center gap-2 font-medium text-ink">
+              <span className="live-dot" aria-hidden />
+              First {offer.earlySlots}
+            </span>
+            <span className="num text-muted">
+              <span className="text-ink">{offer.earlySlotsTaken}</span>/{offer.earlySlots} slots taken
+            </span>
+          </div>
+          <div
+            className="mt-2 h-1.5 overflow-hidden rounded-full bg-white"
+            role="progressbar"
+            aria-label={`${offer.earlySlotsTaken} of ${offer.earlySlots} slots taken`}
+            aria-valuemin={0}
+            aria-valuemax={offer.earlySlots}
+            aria-valuenow={offer.earlySlotsTaken}
+          >
+            <div className="h-full rounded-full bg-blue" style={{ width: `${(offer.earlySlotsTaken / offer.earlySlots) * 100}%` }} />
+          </div>
+        </div>
         <h1 className="mt-6 text-32 md:text-48">Build and sell a profitable SaaS with AI. Watch me do it live.</h1>
         <p className="mt-5 max-w-[60ch] text-16 text-body">
           I&apos;ve built and sold {offer.products} software products, with {offer.clients}+ paying clients across them. Now I&apos;m

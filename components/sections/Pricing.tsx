@@ -8,7 +8,7 @@ export function Pricing() {
     <section id="pricing" className="section">
       <div className="text-center">
         <div className="flex justify-center">
-          <Eyebrow idx="06">Pricing</Eyebrow>
+          <Eyebrow idx="05">Pricing</Eyebrow>
         </div>
         <h2 className="mt-3 text-24 md:text-32">One membership. Everything included.</h2>
         <p className="mt-3 text-16 text-muted">

@@ -4,10 +4,8 @@ import { Numbers } from '@/components/sections/Numbers'
 import { Channel } from '@/components/sections/Channel'
 import { Inside } from '@/components/sections/Inside'
 import { CtaBand } from '@/components/sections/CtaBand'
-import { WhoFor } from '@/components/sections/WhoFor'
 import { Curriculum } from '@/components/sections/Curriculum'
 import { Wall } from '@/components/sections/Wall'
-import { Reassurance } from '@/components/sections/Reassurance'
 import { Pricing } from '@/components/sections/Pricing'
 import { Faq } from '@/components/sections/Faq'
 import { FinalCta, StillDeciding } from '@/components/sections/Closing'
@@ -38,11 +36,8 @@ export default function Page() {
         <Channel />
         <Inside />
         <CtaBand label="Don't miss the doors" title={`Waitlist members get in first, at ${usd(offer.foundingPrice)}/year.`} location="inside" />
-        <WhoFor />
         <Curriculum />
         <Wall />
-        <CtaBand label="Join them" title="Get in the day doors open." location="reviews" />
-        <Reassurance />
         <Pricing />
         <Faq />
         <StillDeciding />

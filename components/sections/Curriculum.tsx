@@ -26,7 +26,7 @@ export function Curriculum() {
 
   return (
     <section id="curriculum" className="section">
-      <Eyebrow idx="04">Curriculum</Eyebrow>
+      <Eyebrow idx="03">Curriculum</Eyebrow>
       <h2 className="mt-3 text-24 md:text-32">
         <span className="num">5</span> weeks · <span className="num">40</span> lessons · <span className="num">7</span> guides
       </h2>

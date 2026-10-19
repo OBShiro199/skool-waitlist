@@ -3,7 +3,8 @@
 **Product:** Build a Profitable $10K p/m App (Skool community)
 **Page:** one-page waitlist at `https://buildsoftwaresolo.com`
 **Owner:** Olly
-**Status:** Ready to build · v1.2 · 19 Oct 2026
+**Status:** Built · v1.3 · 19 Oct 2026
+**Changes since v1.2:** hero graphic replaced by Olly's thumbnail on a landscape panel; hero pill replaced by a "First 20 · 7/20 slots taken" progress bar (numbers set by hand in `content/offer.ts`); removed the small cards 05–09 under What's inside, the Who it's for section, the second CTA band and the reassurance triplet (6.7, 6.9, 6.11).
 **Doors open:** date not announced yet. The page never mentions a date until Olly sets one in config.
 **Skool:** https://www.skool.com/build-profitable-software
 **Design system:** Quiet Precision v1.0 ([quiet-precision-design-system.md](quiet-precision-design-system.md), referred to below as "QP")

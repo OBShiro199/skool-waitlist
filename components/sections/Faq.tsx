@@ -11,7 +11,7 @@ export function Faq() {
   return (
     <section id="faq" className="section grid gap-8 md:grid-cols-[1fr_2fr] md:gap-12">
       <div>
-        <Eyebrow idx="07">FAQ</Eyebrow>
+        <Eyebrow idx="06">FAQ</Eyebrow>
         <h2 className="mt-3 text-24 md:text-32">Frequently asked questions.</h2>
       </div>
       <div className="border-t border-hairline">
