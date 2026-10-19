@@ -2,8 +2,8 @@
 
 import { headers } from 'next/headers'
 import { z } from 'zod'
-import { hashIp, insertSignup, markConfirmationSent, recentFromIp, signId, updateProfile, verifyToken } from '@/lib/store'
-import { sendConfirmation } from '@/lib/email'
+import { countSignups, hashIp, insertSignup, markConfirmationSent, recentFromIp, signId, updateProfile, verifyToken } from '@/lib/store'
+import { notifyOwner, sendConfirmation } from '@/lib/email'
 
 export type JoinStatus = 'ok' | 'exists' | 'invalid' | 'rate_limited' | 'error'
 export type JoinResult = { status: JoinStatus; token?: string }
@@ -56,12 +56,18 @@ export async function join(input: JoinInput): Promise<JoinResult> {
     if (!id) return { status: 'exists' }
 
     // the row is the source of truth; a failed email must not fail the signup
-    try {
-      await sendConfirmation(d.email)
-      await markConfirmationSent(id)
-    } catch (e) {
-      console.error('confirmation email failed', e)
-    }
+    const country = h.get('x-vercel-ip-country')
+    await Promise.all([
+      sendConfirmation(d.email)
+        .then(() => markConfirmationSent(id))
+        .catch((e) => console.error('confirmation email failed', e)),
+      countSignups()
+        .catch(() => null)
+        .then((total) =>
+          notifyOwner({ email: d.email, location: d.location, ref: d.ref, source: d.utm_source, campaign: d.utm_campaign, country, total }),
+        )
+        .catch((e) => console.error('owner notification failed', e)),
+    ])
     return { status: 'ok', token: signId(id) }
   } catch (e) {
     console.error('join failed', e)

@@ -125,3 +125,12 @@ export async function listSignups(limit = 5000): Promise<SignupRow[]> {
   }
   return (await readLocal()).sort((a, b) => b.created_at.localeCompare(a.created_at)).slice(0, limit)
 }
+
+export async function countSignups(): Promise<number> {
+  if (supabase) {
+    const { count, error } = await supabase.from('waitlist_signups').select('id', { count: 'exact', head: true })
+    if (error) throw error
+    return count ?? 0
+  }
+  return (await readLocal()).length
+}
