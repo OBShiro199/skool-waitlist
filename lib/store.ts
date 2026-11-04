@@ -29,6 +29,9 @@ const supabase =
 
 export const usingLocalStore = !supabase
 
+/** The site's own database (waitlist, Vault saved searches and export log), or null when not configured. */
+export const siteDb = () => supabase
+
 export const hashIp = (ip: string) =>
   createHash('sha256').update(ip + (process.env.IP_HASH_SALT ?? 'dev-salt')).digest('hex')
 
