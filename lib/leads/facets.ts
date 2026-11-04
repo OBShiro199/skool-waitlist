@@ -5,7 +5,7 @@ import { leadsDb } from './rows'
 export type Facets = Record<string, { value: string; n: number | null }[]>
 
 // Used until the nightly dashboard_facets table exists in the Decibel database: the fixed value
-// sets from PRD 4.2, without counts. Countries come from the browser's own list.
+// sets from PRD 4.2, plus common countries, without counts.
 const FIXED: Record<string, string[]> = {
   seniority: ['c-level', 'vp', 'director', 'manager', 'senior', 'junior'],
   size: ['1 to 10', '11 to 50', '51 to 200', '201 to 500', '501 to 1000', '1001 to 5000', '5001 to 10000', '10001+'],
@@ -16,6 +16,10 @@ const FIXED: Record<string, string[]> = {
     'Design & Creative Services', 'Customer Service & Support', 'Consulting & Strategy',
   ],
   email_status: ['VALID', 'CATCH_ALL'],
+  country: [
+    'United Kingdom', 'Ireland', 'Germany', 'France', 'Netherlands', 'Spain', 'Italy', 'Sweden', 'Switzerland', 'Belgium',
+    'Denmark', 'Norway', 'Finland', 'Austria', 'Poland', 'Portugal', 'Czechia', 'Greece', 'Romania', 'Hungary', 'Luxembourg',
+  ],
   mobile_code: ['+44', '+353', '+49', '+33', '+34', '+31', '+39', '+46', '+41', '+47', '+45', '+32', '+43', '+48', '+351', '+358', '+420', '+352', '+30', '+40', '+36', '+1'],
 }
 
@@ -48,6 +52,8 @@ export async function facetsFor(dataset: DatasetId): Promise<{ facets: Facets; c
   const facets: Facets = {}
   for (const [k, vals] of Object.entries(FIXED)) {
     if (k === 'mobile_code' && dataset === 'us') continue
+    if (k === 'country' && dataset === 'us') { facets.country = [{ value: 'United States', n: null }]; facets.hq_country = facets.country; continue }
+    if (k === 'country') facets.hq_country = vals.map((value) => ({ value, n: null }))
     facets[k] = vals.map((value) => ({ value, n: null }))
   }
   return { facets, counts: false }
