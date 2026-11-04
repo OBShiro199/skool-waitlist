@@ -33,7 +33,10 @@ export async function searchIds(alias: string, f: Filters, offset: number, limit
       cache: 'no-store',
     })
     if (!res.ok) {
-      console.error('typesense', res.status, (await res.text()).slice(0, 300), alias, p.filter_by)
+      const text = await res.text()
+      // An index loaded before the mobile fields existed: answer "no matches, with a reason" rather than an error.
+      if (res.status < 500 && /field named `?(has_mobile|mobile_codes_h)/.test(text)) return { ids: [], count: 0, missingMobileFields: true }
+      console.error('typesense', res.status, text.slice(0, 300), alias, p.filter_by)
       throw new Error('search_failed')
     }
     const body = (await res.json()) as { found: number; hits?: { document: { id: string } }[] }
@@ -42,5 +45,5 @@ export async function searchIds(alias: string, f: Filters, offset: number, limit
     for (const h of hits) ids.push(h.document.id)
     if (step === 0 || hits.length < step || ids.length >= limit) break
   }
-  return { ids, count: found }
+  return { ids, count: found, missingMobileFields: false }
 }

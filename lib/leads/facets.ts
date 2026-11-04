@@ -51,7 +51,6 @@ export async function facetsFor(dataset: DatasetId): Promise<{ facets: Facets; c
   }
   const facets: Facets = {}
   for (const [k, vals] of Object.entries(FIXED)) {
-    if (k === 'mobile_code' && dataset === 'us') continue
     if (k === 'country' && dataset === 'us') { facets.country = [{ value: 'United States', n: null }]; facets.hq_country = facets.country; continue }
     if (k === 'country') facets.hq_country = vals.map((value) => ({ value, n: null }))
     facets[k] = vals.map((value) => ({ value, n: null }))

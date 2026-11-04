@@ -4,7 +4,7 @@ export type DatasetId = 'uk-eu' | 'us'
 
 export const DATASETS: Record<DatasetId, { alias: string; table: string; hasMobiles: boolean; label: string }> = {
   'uk-eu': { alias: 'leads', table: 'data_list', hasMobiles: true, label: 'UK & EU' },
-  us: { alias: 'us_leads', table: 'us_data_list', hasMobiles: false, label: 'US' },
+  us: { alias: 'us_leads', table: 'us_data_list', hasMobiles: true, label: 'US' },
 }
 
 export const isDataset = (v: unknown): v is DatasetId => v === 'uk-eu' || v === 'us'

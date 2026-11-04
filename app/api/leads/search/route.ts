@@ -33,7 +33,10 @@ export async function POST(req: Request) {
 
   if (!searchConfigured() || !rowsConfigured()) return json({ error: 'search_not_configured' }, 503)
   try {
-    const { ids, count } = await searchIds(DATASETS[dataset].alias, filters, offset, limit)
+    const { ids, count, missingMobileFields } = await searchIds(DATASETS[dataset].alias, filters, offset, limit)
+    if (missingMobileFields) {
+      return json(idsOnly ? { ids: [], count: { n: 0, exact: true }, took_ms: 0 } : { rows: [], count: { n: 0, exact: true }, took_ms: 0, notice: 'no_mobiles' })
+    }
     const n = { n: count, exact: true }
     if (idsOnly) return json({ ids, count: n, took_ms: Date.now() - started })
     const rows = ids.length ? await rowsByIds(dataset, ids) : []
