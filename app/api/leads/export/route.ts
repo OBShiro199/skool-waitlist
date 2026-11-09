@@ -34,13 +34,14 @@ export async function POST(req: Request) {
 
   try {
     let ids: string[]
-    let kind: 'selected' | 'all'
+    let kind: 'selected' | 'all' | 'list'
+    let filters: Filters | undefined
     if (Array.isArray(body.ids)) {
-      kind = 'selected'
+      kind = body.kind === 'list' ? 'list' : 'selected'
       ids = body.ids.filter((x): x is string => typeof x === 'string' && UUID.test(x)).slice(0, 500)
     } else {
       kind = 'all'
-      const filters: Filters = body.filters && typeof body.filters === 'object' && !Array.isArray(body.filters) ? (body.filters as Filters) : {}
+      filters = body.filters && typeof body.filters === 'object' && !Array.isArray(body.filters) ? (body.filters as Filters) : {}
       const offset = clampInt(body.offset, 0, 1_000_000, 0)
       const limit = Math.min(1000, remaining)
       if (!DATASETS[dataset].hasMobiles && asksForMobiles(filters)) ids = []
@@ -54,7 +55,8 @@ export async function POST(req: Request) {
     const rows = mockEnabled()
       ? mockSearch(dataset, {}).filter((r) => ids.includes(r.lead_id))
       : await rowsByIds(dataset, ids)
-    if (rows.length) await logExport(g.user, dataset, rows.length, kind)
+    const label = typeof body.label === 'string' ? body.label.slice(0, 160) : undefined
+    if (rows.length) await logExport(g.user, { dataset, leadIds: rows.map((r) => r.lead_id), kind, filters, label })
     return json({ rows, fetched: ids.length, remaining: remaining - rows.length, resets })
   } catch (e) {
     console.error('leads export failed', dataset, e instanceof Error ? e.message : e)
