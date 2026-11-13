@@ -2,6 +2,7 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import s from './library.module.css'
+import { HeroPreview } from './HeroPreview'
 
 type Card = { slug: string; name: string; style: string; what: string; video: string; poster: string }
 const SKOOL = 'https://www.skool.com/build-profitable-software'
@@ -49,12 +50,7 @@ export function LandersLibrary({ landers }: { landers: Card[] }) {
         <div className={s.grid}>
           {list.map((l) => (
             <Link key={l.slug} href={`/landers/${l.slug}`} className={s.card}>
-              <div className={s.media}>
-                <video poster={l.poster} autoPlay muted loop playsInline preload="metadata" aria-hidden>
-                  <source src={l.video} type="video/mp4" />
-                  <source src={l.video.replace(/\.mp4$/, '.webm')} type="video/webm" />
-                </video>
-              </div>
+              <HeroPreview slug={l.slug} poster={l.poster} name={l.name} />
               <div className={s.meta}>
                 <div className={s.row}><b>{l.name}</b><span className={s.tag}>{l.style}</span></div>
                 <p>{l.what}</p>

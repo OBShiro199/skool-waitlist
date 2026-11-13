@@ -38,3 +38,76 @@
 
 /* the site sets every heading to near-black; here headings take their section colour */
 .page :is(h1, h2, h3) { color: inherit; }
+
+.sub { font-size: 16.5px; line-height: 1.65; max-width: 520px; margin: 0; }
+.demo, .limitsRow, .crewView, .faq, .closing { position: relative; padding: clamp(72px, 10vw, 130px) clamp(20px, 5vw, 64px); }
+.demo h2, .limitsRow h2, .crewView h2, .closing h2 { font-family: var(--pw-display), serif; font-weight: 300; font-size: clamp(30px, 3.8vw, 50px); line-height: 1.08; margin: 14px 0 16px; max-width: 760px; }
+/* swap demo */
+.swap { margin-top: 36px; max-width: 760px; background: var(--paper); border: 1px solid rgba(30,42,58,.2); padding: 22px; display: grid; gap: 16px; box-shadow: 0 24px 40px -30px rgba(30,42,58,.45); }
+.swapLeg { display: grid; grid-template-columns: 1fr auto; gap: 4px 16px; padding-bottom: 14px; border-bottom: 1px solid rgba(30,42,58,.12); font-variant-numeric: tabular-nums; }
+.swapLeg span { font-size: 12.5px; letter-spacing: .08em; color: rgba(30,42,58,.65); grid-column: 1 / -1; }
+.swapLeg em { font-style: normal; font-weight: 600; font-size: 13px; }
+.ok { color: #2f7a4f; }
+.warn { color: var(--red); }
+.swapBtn { justify-self: start; background: var(--red); color: #fff; border: 0; padding: 12px 18px; font: 600 14px/1 var(--pw-body), sans-serif; cursor: pointer; }
+.swapThinking { margin: 0; font-size: 14px; color: rgba(30,42,58,.7); animation: blink 1s ease-in-out infinite; }
+@keyframes blink { 50% { opacity: .45; } }
+.swapList { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.swapList li { display: grid; grid-template-columns: 1fr auto auto; gap: 16px; align-items: center; padding: 12px 14px; border: 1px solid rgba(30,42,58,.14); background: #fff; animation: slidein .35s cubic-bezier(.16,1,.3,1) both; }
+.swapList li:nth-child(2) { animation-delay: .08s; }
+.swapList li:nth-child(3) { animation-delay: .16s; }
+@keyframes slidein { from { opacity: 0; transform: translateY(6px); } }
+.swapList li > div:first-child { display: grid; gap: 2px; }
+.swapList li span { font-size: 13px; color: rgba(30,42,58,.7); }
+.swapMeta { display: grid; justify-items: end; gap: 2px; }
+.swapMeta em { font-style: normal; font-size: 12px; font-weight: 600; color: #36639c; }
+.swapList button { border: 1px solid var(--navy); background: #fff; color: var(--navy); padding: 8px 12px; font: 600 13px/1 var(--pw-body), sans-serif; cursor: pointer; }
+.swapList button:disabled { opacity: .5; cursor: default; }
+.swapPicked { border-color: #2f7a4f !important; background: #f2f8f4 !important; }
+.swapPicked button { background: #2f7a4f !important; color: #fff !important; border-color: #2f7a4f !important; opacity: 1 !important; }
+.swapReset { justify-self: start; background: none; border: 0; padding: 0; color: var(--navy); text-decoration: underline; cursor: pointer; font: inherit; font-size: 13.5px; }
+/* limits */
+.limitsRow { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 440px); gap: 56px; align-items: center; background: var(--sky); }
+.limits { background: var(--paper); border: 1px solid rgba(30,42,58,.2); padding: 22px; display: grid; gap: 16px; }
+.limitsWho { font-family: var(--pw-display), serif; font-weight: 400; font-size: 22px; }
+.limitHead { display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 6px; font-variant-numeric: tabular-nums; }
+.limitBar { height: 8px; background: rgba(30,42,58,.1); }
+.limitBar i { display: block; height: 100%; background: var(--navy); animation: grow 1.2s cubic-bezier(.16,1,.3,1) both; transform-origin: left; }
+.limitBar .limitHigh { background: var(--red); }
+@keyframes grow { from { transform: scaleX(0); } }
+/* crew view */
+.crewView { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 64px; align-items: center; }
+.crewPhone { background: var(--navy); color: var(--paper); border-radius: 34px; padding: 28px 16px 18px; display: grid; gap: 8px; box-shadow: 0 30px 50px -30px rgba(30,42,58,.8); }
+.crewTop { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; opacity: .7; padding: 0 6px 6px; }
+.crewDay { background: rgba(251,250,247,.08); padding: 10px 12px; display: grid; grid-template-columns: 36px 1fr; gap: 2px 8px; font-size: 13px; }
+.crewDay b { grid-row: span 2; font-weight: 600; }
+.crewDay small { opacity: .65; }
+.crewPhone button { margin-top: 6px; background: var(--red); color: #fff; border: 0; padding: 11px; font: 600 13.5px/1 var(--pw-body), sans-serif; }
+/* stats */
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); background: var(--navy); color: var(--paper); }
+.stats div { padding: clamp(32px, 5vw, 56px) clamp(20px, 4vw, 40px); display: grid; gap: 8px; }
+.stats div + div { border-left: 1px solid rgba(251,250,247,.15); }
+.stats b { font-family: var(--pw-display), serif; font-weight: 300; font-size: clamp(30px, 3.6vw, 46px); }
+.stats span { font-size: 14px; opacity: .75; }
+/* faq + closing */
+.faq { max-width: 900px; }
+.faq details { border-bottom: 1px solid rgba(30,42,58,.15); padding: 18px 0; }
+.faq summary { cursor: pointer; font-family: var(--pw-display), serif; font-size: 22px; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: ' ↗'; color: var(--red); font-size: 16px; }
+.faq p { margin: 10px 0 0; line-height: 1.65; max-width: 680px; }
+.closing { text-align: center; display: grid; justify-items: center; gap: 24px; background: var(--sky); }
+.closing h2 em { color: var(--red); }
+@media (max-width: 860px) {
+  .limitsRow, .crewView { grid-template-columns: 1fr; gap: 36px; }
+  .crewPhone { max-width: 300px; }
+  .stats { grid-template-columns: 1fr; }
+  .stats div + div { border-left: 0; border-top: 1px solid rgba(251,250,247,.15); }
+  .swapList li { grid-template-columns: 1fr; gap: 8px; }
+  .swapMeta { justify-items: start; }
+}
+
+/* the site body uses a fixed 22px line height; landers need proportional spacing for big type */
+.page { line-height: 1.5; letter-spacing: normal; }
+.page :where(h1, h2, h3) { line-height: 1.1; }
+.page :where(b, strong, span, em) { line-height: inherit; }

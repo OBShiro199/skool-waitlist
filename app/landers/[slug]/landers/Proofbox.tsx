@@ -6,6 +6,22 @@ import s from './proofbox.module.css'
 
 const sp = (n: string) => `/landers/sprites/proofbox/${n}.webp`
 
+const TICKET = [['Sourdough, white', 38, '+4'], ['Seeded rye', 14, '−2'], ['Croissant', 64, '+10'], ['Pain au chocolat', 40, '+6'], ['Cinnamon bun', 24, '+8'], ['Focaccia slab', 6, '0']]
+// last week: baked vs sold (croissants)
+const WEEK = [['Mon', 48, 41], ['Tue', 48, 39], ['Wed', 52, 50], ['Thu', 52, 52], ['Fri', 60, 60], ['Sat', 72, 72], ['Sun', 40, 33]]
+const DAY = [
+  ['04:00', 'The baker opens the app', 'The list was agreed at 3pm yesterday. No guessing in the dark.'],
+  ['10:00', 'Croissants still on the shelf', 'Last month they were gone by 9:40. Now the 10 o’clock regulars get one.'],
+  ['15:00', 'Tomorrow’s list arrives', 'Six weeks of tills, the forecast and the market calendar, turned into numbers.'],
+  ['17:30', 'Close with 8 items left', 'Down from 41. Two loaves go to the food bank, the rest go home with the team.'],
+]
+const FAQ = [
+  ['Which tills does it work with?', 'Most card readers and tills used by independent shops, plus a CSV upload if yours is older. Set-up takes about 15 minutes.'],
+  ['What if I bake to order as well?', 'Standing and one-off orders sit on the same list, so the shelf plan and the orders never fight over the same dough.'],
+  ['Does it handle new products?', 'For the first two weeks it borrows the pattern from your nearest product, then learns its own.'],
+  ['Can I override it?', 'Always. Change any number and Proofbox learns from what you changed and what then sold.'],
+]
+
 export default function Proofbox() {
   return (
     <div className={`${s.page} ${display.variable} ${body.variable}`}>
@@ -43,6 +59,48 @@ export default function Proofbox() {
         </ul>
       </section>
 
+      <section className={s.ticketRow}>
+        <Companions spots={[{ src: sp('croissant'), top: '70%', right: '4%', size: 120, rotate: 14 }]} />
+        <div className={s.ticketCopy}>
+          <h2>Tomorrow’s bake, on one ticket.</h2>
+          <p>Each number comes with the reason behind it, so the 4am baker trusts it. Tap a line to change it; the ticket prints on the kitchen printer at 3pm.</p>
+        </div>
+        <div className={s.ticket} aria-label="Example bake ticket for Saturday">
+          <div className={s.ticketHead}><b>PROOFBOX</b><span>Bake list · Sat 14 Dec</span></div>
+          <p className={s.ticketWhy}>Sunny, 9°C · Christmas market on Fore St · last 6 Saturdays</p>
+          {TICKET.map(([n, q, d]) => (
+            <div key={n as string} className={s.ticketLine}><span>{n}</span><i /><b>{q}</b><small>{d}</small></div>
+          ))}
+          <div className={s.ticketFoot}><span>Flour needed</span><b>41.5 kg</b></div>
+          <div className={s.tear} aria-hidden />
+        </div>
+      </section>
+
+      <section className={s.chart}>
+        <h2>Croissants, last week</h2>
+        <p className={s.chartSub}>Baked against sold. The gap is what went in the bin.</p>
+        <div className={s.bars} role="img" aria-label="Bar chart: baked versus sold croissants for each day; the gap is largest on Monday, Tuesday and Sunday">
+          {WEEK.map(([d, baked, sold]) => (
+            <div key={d as string} className={s.barCol}>
+              <div className={s.barPair}>
+                <span className={s.baked} style={{ height: `${(baked as number) * 3}px` }}><em>{baked}</em></span>
+                <span className={s.sold} style={{ height: `${(sold as number) * 3}px` }}><em>{sold}</em></span>
+              </div>
+              <b>{d}</b>
+            </div>
+          ))}
+        </div>
+        <div className={s.key}><span><i className={s.baked} /> Baked</span><span><i className={s.sold} /> Sold</span></div>
+      </section>
+
+      <section className={s.day}>
+        <Companions spots={[{ src: sp('steam'), top: '4%', left: '6%', size: 110 }]} />
+        <h2>A day with Proofbox</h2>
+        <ol className={s.timeline}>
+          {DAY.map(([t, h, p]) => <li key={t}><time>{t}</time><div><h3>{h}</h3><p>{p}</p></div></li>)}
+        </ol>
+      </section>
+
       <section className={s.menu}>
         <Companions spots={[{ src: sp('oven'), top: '8%', right: '5%', size: 170 }]} />
         <div className={s.board}>
@@ -55,6 +113,20 @@ export default function Proofbox() {
           <p>Café accounts, standing orders and delivery runs.</p>
           <DemoButton className={s.cta}>Try it free for 30 days</DemoButton>
         </div>
+      </section>
+
+      <section className={s.faq}>
+        <h2>Questions from bakers</h2>
+        <div className={s.faqGrid}>
+          {FAQ.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}
+        </div>
+      </section>
+
+      <section className={s.closing}>
+        <Companions spots={[{ src: sp('loaf'), top: '20%', left: '8%', size: 150, rotate: -10 }, { src: sp('croissant'), top: '30%', right: '9%', size: 130, rotate: 12 }]} />
+        <h2>Sell the last loaf at closing.</h2>
+        <p>30 days free. Connect your till in 15 minutes.</p>
+        <DemoButton className={s.cta}>Plan tomorrow’s bake</DemoButton>
       </section>
 
       <footer className={s.footer}>Proofbox · A fictional startup from Lander Library</footer>

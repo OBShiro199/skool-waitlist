@@ -30,3 +30,69 @@
 
 /* the site sets every heading to near-black; here headings take their section colour */
 .page :is(h1, h2, h3) { color: inherit; }
+
+.lSnap { background: #F2EDE0; z-index: 2; }
+.l2 { z-index: 3; }
+.lCalc { background: var(--pine); color: var(--paper); z-index: 4; }
+.lYear { background: #E2E8D2; z-index: 5; }
+.l3 { z-index: 6; }
+.lFaq { background: var(--paper); z-index: 7; }
+.lClose { background: var(--pine); color: var(--paper); z-index: 8; text-align: center; display: grid; justify-items: center; gap: 24px; }
+.lClose h2 { margin: 0; }
+.footer { z-index: 9; background: var(--pine); color: rgba(233,226,207,.7); }
+.lead { margin: 0; font-size: 17px; line-height: 1.65; max-width: 480px; }
+/* snap */
+.snapRow { display: grid; grid-template-columns: minmax(0, 320px) minmax(0, 1fr); gap: 64px; align-items: center; max-width: 1000px; }
+.phone { position: relative; background: #1e2a22; border-radius: 40px; padding: 46px 18px 22px; box-shadow: 0 30px 60px -30px rgba(20,32,25,.7); display: grid; gap: 14px; transform: rotate(-3deg); }
+.notch { position: absolute; top: 14px; left: 50%; width: 90px; height: 22px; margin-left: -45px; background: #0f1611; border-radius: 12px; }
+.receipt { background: #fff; padding: 16px; font: 12.5px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace; color: #222; display: grid; gap: 2px; border-radius: 4px; position: relative; overflow: hidden; }
+.receipt::after { content: ''; position: absolute; left: 0; right: 0; height: 2px; background: var(--red); box-shadow: 0 0 12px var(--red); animation: scan 2.8s ease-in-out infinite; }
+@keyframes scan { 0% { top: 0; } 50% { top: calc(100% - 2px); } 100% { top: 0; } }
+.receipt b { letter-spacing: .2em; }
+.receipt i { border-top: 1px dashed #999; margin: 6px 0; }
+.receipt p { margin: 0; display: flex; justify-content: space-between; }
+.receipt p:last-child { font-weight: 700; border-top: 1px dashed #999; padding-top: 4px; margin-top: 4px; }
+.sorted { background: var(--paper); border-radius: 14px; padding: 12px 14px; display: grid; gap: 2px; color: var(--pine); }
+.sorted span { font-size: 11.5px; text-transform: uppercase; letter-spacing: .1em; opacity: .7; }
+.sorted b { font-family: var(--fw-display), serif; font-weight: 400; font-size: 22px; }
+.sorted small { font-size: 12.5px; }
+/* calculator */
+.calcRowWrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: 64px; align-items: center; max-width: 1000px; }
+.calc { background: var(--paper); color: var(--pine); border-radius: 22px; padding: 28px; display: grid; gap: 10px; box-shadow: 0 24px 40px -24px rgba(0,0,0,.6); }
+.calc label { font-size: 13.5px; font-weight: 600; }
+.calcValue { font-family: var(--fw-display), serif; font-size: 52px; line-height: 1; }
+.calc input[type=range] { width: 100%; accent-color: var(--pine); margin: 6px 0 12px; }
+.calcRow { display: flex; justify-content: space-between; padding: 10px 0; border-top: 1px solid rgba(47,74,58,.18); font-size: 15px; }
+.calcTotal { font-weight: 600; font-size: 17px; }
+.calcTotal b { color: var(--pine); }
+.calcNote { margin: 4px 0 0; font-size: 12px; opacity: .7; line-height: 1.5; }
+/* year */
+.year { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; position: relative; }
+.year::before { content: ''; position: absolute; top: 9px; left: 0; right: 0; border-top: 2px dashed rgba(47,74,58,.4); }
+.year li { position: relative; padding: 32px 18px 0 0; display: grid; gap: 6px; align-content: start; }
+.year li::before { content: ''; position: absolute; top: 2px; left: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--pine); border: 3px solid #E2E8D2; }
+.year li:last-child::before { background: var(--red); }
+.year span { font-family: var(--fw-display), serif; font-size: 24px; }
+.year b { font-weight: 600; }
+.year p { margin: 0; font-size: 14.5px; line-height: 1.55; }
+/* faq */
+.faq { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; max-width: 1000px; }
+.faq details { background: #fff; border-radius: 14px; padding: 18px 20px; box-shadow: 0 6px 16px -10px rgba(20,32,25,.4); }
+.faq summary { cursor: pointer; font-weight: 600; font-size: 16px; list-style: none; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq p { margin: 10px 0 0; line-height: 1.6; }
+@media (max-width: 860px) {
+  .snapRow, .calcRowWrap { grid-template-columns: 1fr; gap: 36px; }
+  .phone { max-width: 300px; transform: none; }
+  .year { grid-template-columns: 1fr; gap: 18px; }
+  .year::before { top: 0; bottom: 0; left: 7px; right: auto; border-top: 0; border-left: 2px dashed rgba(47,74,58,.4); }
+  .year li { padding: 0 0 0 32px; }
+  .faq { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .receipt::after { animation: none; display: none; } }
+
+/* the site body uses a fixed 22px line height; landers need proportional spacing for big type */
+.page { line-height: 1.5; letter-spacing: normal; }
+.page :where(h1, h2, h3) { line-height: 1.1; }
+.page :where(b, strong, span, em) { line-height: inherit; }
+.lClose .cta { justify-self: center; }

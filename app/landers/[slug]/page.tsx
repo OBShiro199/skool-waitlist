@@ -23,12 +23,14 @@ export function generateStaticParams() {
   return LANDERS.map((l) => ({ slug: l.slug }))
 }
 
-export default async function LanderPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function LanderPage({ params, searchParams }: { params: Promise<{ slug: string }>; searchParams: Promise<{ preview?: string }> }) {
   if (!(await hasLandersSession())) redirect('/landers')
   const { slug } = await params
   const l = getLander(slug)
   const Page = PAGES[slug as keyof typeof PAGES]
   if (!l || !Page) notFound()
+  // ?preview=1: the library card shows the real hero in a scaled-down frame, without the clone controls
+  if ((await searchParams).preview === '1') return <Page />
   return (
     <>
       <Page />

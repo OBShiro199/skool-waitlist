@@ -43,3 +43,67 @@
 
 /* the site sets every heading to near-black; here headings take their section colour */
 .page :is(h1, h2, h3) { color: inherit; }
+
+/* morning map */
+.map { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 64px; align-items: center; padding: clamp(80px, 12vw, 150px) clamp(20px, 5vw, 64px); border-top: 1px solid rgba(232,228,218,.1); }
+.map h2, .compare h2 { font-family: var(--ph-display), serif; font-weight: 300; font-size: clamp(30px, 3.6vw, 48px); line-height: 1.08; margin: 0 0 18px; }
+.mapCopy p:not(.eyebrow) { color: rgba(232,228,218,.75); line-height: 1.7; font-size: 15.5px; margin: 0 0 28px; max-width: 460px; }
+.legend { display: flex; align-items: center; gap: 12px; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: rgba(232,228,218,.6); }
+.legend i { display: flex; }
+.legend b { width: 22px; height: 10px; }
+.mapViz { position: relative; }
+.grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; padding: 14px; background: #0b1018; border: 1px solid rgba(232,228,218,.14); transform: perspective(1200px) rotateX(18deg) rotateZ(-4deg); box-shadow: 0 40px 80px -30px rgba(0,0,0,.8); }
+.grid span { aspect-ratio: 1; animation: pulse 6s ease-in-out infinite; }
+.grid span:nth-child(7n) { animation-delay: -2s; }
+.grid span:nth-child(5n) { animation-delay: -4s; }
+@keyframes pulse { 50% { filter: brightness(1.18); } }
+.callout { position: absolute; top: 18%; right: -8px; display: grid; gap: 4px; padding: 12px 14px; background: var(--star); color: var(--night); font-size: 13px; line-height: 1.4; max-width: 220px; box-shadow: 0 16px 30px -12px rgba(0,0,0,.6); }
+.callout::before { content: ''; position: absolute; left: -30px; top: 50%; width: 30px; border-top: 1px solid var(--star); }
+.sms { position: absolute; left: -18px; bottom: -36px; width: min(300px, 80%); padding: 14px 16px; border-radius: 18px 18px 18px 4px; background: #1c2230; border: 1px solid rgba(232,228,218,.12); box-shadow: 0 20px 40px -14px rgba(0,0,0,.7); }
+.smsFrom { font-size: 11px; letter-spacing: .08em; color: var(--dawn); }
+.sms p { margin: 6px 0 0; font-size: 13.5px; line-height: 1.5; }
+/* comparison */
+.compare { padding: clamp(80px, 12vw, 150px) clamp(20px, 5vw, 64px); background: #0A0E15; }
+.tableWrap { overflow-x: auto; margin-top: 40px; }
+.compare table { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14.5px; }
+.compare th, .compare td { text-align: left; padding: 18px 16px; border-bottom: 1px solid rgba(232,228,218,.12); font-weight: 300; }
+.compare thead th { font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(232,228,218,.6); font-weight: 500; }
+.compare tbody th { font-weight: 500; color: rgba(232,228,218,.9); width: 26%; }
+.compare td { color: rgba(232,228,218,.7); }
+.compare .us { color: var(--star); background: rgba(242,166,90,.08); }
+.compare thead .us { color: var(--dawn); }
+/* voice */
+.voice { padding: clamp(80px, 12vw, 150px) clamp(20px, 5vw, 64px); }
+.voice blockquote { margin: 0 auto; max-width: 880px; }
+.voice p { font-family: var(--ph-display), serif; font-style: italic; font-weight: 300; font-size: clamp(24px, 3vw, 38px); line-height: 1.35; margin: 0 0 22px; }
+.voice footer { font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--dawn); }
+/* faq */
+.faq { padding: clamp(70px, 10vw, 130px) clamp(20px, 5vw, 64px); max-width: 920px; }
+.faqList details { border-top: 1px solid rgba(232,228,218,.14); }
+.faqList details:last-child { border-bottom: 1px solid rgba(232,228,218,.14); }
+.faqList summary { cursor: pointer; list-style: none; padding: 22px 0; font-family: var(--ph-display), serif; font-size: 22px; display: flex; justify-content: space-between; gap: 16px; }
+.faqList summary::-webkit-details-marker { display: none; }
+.faqList summary::after { content: '+'; color: var(--dawn); font-family: var(--ph-body), sans-serif; }
+.faqList details[open] summary::after { content: '–'; }
+.faqList p { margin: 0 0 22px; color: rgba(232,228,218,.75); line-height: 1.7; max-width: 680px; }
+/* closing */
+.closing { min-height: 80svh; display: grid; place-content: center; justify-items: center; text-align: center; gap: 22px; padding: 80px 20px; background-size: cover; background-position: center; }
+.closing h2 { font-family: var(--ph-display), serif; font-weight: 300; font-size: clamp(32px, 4.6vw, 64px); line-height: 1.08; margin: 0; }
+.closing em { color: var(--dawn); }
+.closing p { margin: 0; font-size: 13px; letter-spacing: .08em; color: rgba(232,228,218,.7); }
+@media (max-width: 860px) {
+  .map { grid-template-columns: 1fr; gap: 48px; }
+  .grid { transform: none; }
+  .callout { right: 8px; top: 8px; }
+  .callout::before { display: none; }
+  .sms { left: 8px; bottom: -24px; }
+}
+/* the legend and map must fit any width */
+.map > * { min-width: 0; }
+.legend i { flex: 1; min-width: 0; max-width: 220px; }
+.legend b { flex: 1; min-width: 0; }
+
+/* the site body uses a fixed 22px line height; landers need proportional spacing for big type */
+.page { line-height: 1.5; letter-spacing: normal; }
+.page :where(h1, h2, h3) { line-height: 1.1; }
+.page :where(b, strong, span, em) { line-height: inherit; }

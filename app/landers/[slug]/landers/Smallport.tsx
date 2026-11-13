@@ -6,6 +6,15 @@ import s from './smallport.module.css'
 
 const sp = (n: string) => `/landers/sprites/smallport/${n}.webp`
 
+const COVER = [['House espresso (Cerrado)', 23, 'Reorder by 2 Dec'], ['Huila washed', 9, 'SP-0412 lands 3 Dec'], ['Sidama natural', 4, 'Customs, ~2 days'], ['Decaf (sugarcane)', 31, 'Fine']] as const
+const COST = [['Green coffee (FOB)', 6.2], ['Ocean freight', 0.38], ['Insurance', 0.05], ['Import duty', 0], ['Port, customs & haulage', 0.44], ['Warehouse to roastery', 0.21]] as const
+const FAQ = [
+  ['Do I need to change how I buy?', 'No. Keep your importer and your contracts. Smallport reads the paperwork you already get and tracks from there.'],
+  ['How does it know where the ship is?', 'From the vessel’s public position data and the port’s own status updates, matched to the bill of lading on your lot.'],
+  ['Can my importer see it?', 'Invite them as a viewer. They see the lots you share and can upload documents straight to them.'],
+  ['What about roast loss?', 'Set your average loss per coffee and days of cover is worked out from roasted, not green, weight.'],
+]
+
 const MANIFEST = [
   ['SP-0412', 'Huila, CO', 'Washed Caturra', '18 × 60 kg', 'At sea', 'ETA 3 Dec'],
   ['SP-0413', 'Sidama, ET', 'Natural Heirloom', '12 × 60 kg', 'Customs', 'Cleared in ~2 days'],
@@ -36,6 +45,46 @@ export default function Smallport() {
         </div>
       </section>
 
+      <section className={s.voyage}>
+        <h2>SP-0412, live.</h2>
+        <p className={s.voyageSub}>18 sacks of washed Caturra, from a cooperative in Huila to your roastery.</p>
+        <div className={s.route} role="img" aria-label="Voyage tracker: the shipment has left origin and the port of loading and is at sea, due in 6 days">
+          <svg viewBox="0 0 1000 120" preserveAspectRatio="none" aria-hidden>
+            <path d="M20 90 C 220 20, 420 20, 520 70 S 820 110, 980 40" className={s.track} />
+            <path d="M20 90 C 220 20, 420 20, 520 70 S 820 110, 980 40" className={s.trackDone} />
+          </svg>
+          {[['Origin', 'Huila', '12 Oct', 'done'], ['Port', 'Cartagena', '19 Oct', 'done'], ['At sea', 'Day 22 of 28', 'now', 'now'], ['Port', 'Felixstowe', 'ETA 3 Dec', ''], ['Roastery', 'Your store', '~6 Dec', '']].map(([k, n, d, st], i) => (
+            <div key={i} className={`${s.stop} ${st === 'done' ? s.stopDone : st === 'now' ? s.stopNow : ''}`} style={{ left: `${[2, 26, 52, 76, 98][i]}%` }}>
+              <i /><span>{k}</span><b>{n}</b><small>{d}</small>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className={s.coverRow}>
+        <Companions spots={[{ src: sp('coffee-sacks'), top: '8%', right: '4%', size: 120 }]} />
+        <div className={s.cover}>
+          <h2>Days of cover</h2>
+          {COVER.map(([n, d, note]) => (
+            <div key={n} className={s.coverLine}>
+              <div className={s.coverHead}><b>{n}</b><span>{d} days</span></div>
+              <div className={s.coverBar}><i style={{ width: `${Math.min(100, (d / 35) * 100)}%` }} className={d < 7 ? s.low : d < 14 ? s.mid : ''} /></div>
+              <small>{note}</small>
+            </div>
+          ))}
+        </div>
+        <div className={s.cost}>
+          <h2>Landed cost, per kilo</h2>
+          <table>
+            <tbody>
+              {COST.map(([n, v]) => <tr key={n}><td>{n}</td><td>£{v.toFixed(2)}</td></tr>)}
+            </tbody>
+            <tfoot><tr><td>Landed at your door</td><td>£{COST.reduce((a, [, v]) => a + v, 0).toFixed(2)}</td></tr></tfoot>
+          </table>
+          <small className={s.costNote}>SP-0412, worked out from the invoice, freight bill and import entry. Updates if any of them change.</small>
+        </div>
+      </section>
+
       <section className={s.how}>
         <Companions spots={[{ src: sp('crane'), top: '6%', right: '6%', size: 150 }, { src: sp('truck'), top: '66%', right: '24%', size: 110 }]} />
         <h2>How it works</h2>
@@ -55,6 +104,17 @@ export default function Smallport() {
           <div><span>Who it’s for</span><b>Independent roasters</b><p>Buying direct or through an importer, from a few bags to a few containers.</p></div>
         </div>
         <DemoButton className={s.cta}>Start a 14-day trial</DemoButton>
+      </section>
+
+      <section className={s.faq}>
+        <h2>Questions</h2>
+        <div className={s.faqGrid}>{FAQ.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div>
+      </section>
+
+      <section className={s.closing}>
+        <Companions spots={[{ src: sp('cargo-ship'), top: '22%', right: '8%', size: 170 }, { src: sp('truck'), top: '18%', left: '6%', size: 110 }]} />
+        <h2>Your next lot is already on the water.</h2>
+        <DemoButton className={s.cta}>Track my next lot</DemoButton>
       </section>
 
       <footer className={s.footer}><span>SMALLPORT</span><span>A fictional startup from Lander Library</span></footer>
