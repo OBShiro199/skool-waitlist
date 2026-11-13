@@ -1,11 +1,9 @@
-import { Newsreader, IBM_Plex_Sans } from 'next/font/google'
+import { newsreader as display, ibmPlexSans as body } from '../../_fonts/fonts'
 import { HeroVideo } from '../../_components/HeroVideo'
 import { Companions } from '../../_components/Companions'
 import { DemoButton } from '../../_components/DemoButton'
 import s from './perihelion.module.css'
 
-const display = Newsreader({ subsets: ['latin'], style: ['normal', 'italic'], weight: ['300', '400'], variable: '--ph-display' })
-const body = IBM_Plex_Sans({ subsets: ['latin'], weight: ['300', '400', '500'], variable: '--ph-body' })
 const sp = (n: string) => `/landers/sprites/perihelion/${n}.webp`
 
 export default function Perihelion() {

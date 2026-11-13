@@ -1,11 +1,9 @@
-import { Cormorant_Garamond, Karla } from 'next/font/google'
+import { cormorant as display, karla as body } from '../../_fonts/fonts'
 import { HeroVideo } from '../../_components/HeroVideo'
 import { Companions } from '../../_components/Companions'
 import { DemoButton } from '../../_components/DemoButton'
 import s from './saltmarsh.module.css'
 
-const display = Cormorant_Garamond({ subsets: ['latin'], style: ['normal', 'italic'], weight: ['400', '500'], variable: '--sm-display' })
-const body = Karla({ subsets: ['latin'], weight: ['400', '500'], variable: '--sm-body' })
 const sp = (n: string) => `/landers/sprites/saltmarsh/${n}.webp`
 
 export default function Saltmarsh() {

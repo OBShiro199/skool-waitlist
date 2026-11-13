@@ -1,11 +1,9 @@
-import { Libre_Caslon_Display, Hanken_Grotesk } from 'next/font/google'
+import { caslon as display, hanken as body } from '../../_fonts/fonts'
 import { HeroVideo } from '../../_components/HeroVideo'
 import { Companions } from '../../_components/Companions'
 import { DemoButton } from '../../_components/DemoButton'
 import s from './foldwell.module.css'
 
-const display = Libre_Caslon_Display({ subsets: ['latin'], weight: '400', variable: '--fw-display' })
-const body = Hanken_Grotesk({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--fw-body' })
 const sp = (n: string) => `/landers/sprites/foldwell/${n}.webp`
 
 export default function Foldwell() {

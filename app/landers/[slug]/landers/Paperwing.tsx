@@ -1,11 +1,9 @@
-import { Spectral, Public_Sans } from 'next/font/google'
+import { spectral as display, publicSans as body } from '../../_fonts/fonts'
 import { HeroVideo } from '../../_components/HeroVideo'
 import { Companions } from '../../_components/Companions'
 import { DemoButton } from '../../_components/DemoButton'
 import s from './paperwing.module.css'
 
-const display = Spectral({ subsets: ['latin'], weight: ['300', '400'], style: ['normal', 'italic'], variable: '--pw-display' })
-const body = Public_Sans({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--pw-body' })
 const sp = (n: string) => `/landers/sprites/paperwing/${n}.webp`
 
 const ROWS = [

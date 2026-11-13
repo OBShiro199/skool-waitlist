@@ -1,11 +1,9 @@
-import { Young_Serif, Figtree } from 'next/font/google'
+import { youngSerif as display, figtree as body } from '../../_fonts/fonts'
 import { HeroVideo } from '../../_components/HeroVideo'
 import { Companions } from '../../_components/Companions'
 import { DemoButton } from '../../_components/DemoButton'
 import s from './proofbox.module.css'
 
-const display = Young_Serif({ subsets: ['latin'], weight: '400', variable: '--pb-display' })
-const body = Figtree({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--pb-body' })
 const sp = (n: string) => `/landers/sprites/proofbox/${n}.webp`
 
 export default function Proofbox() {

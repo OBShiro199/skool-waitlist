@@ -1,11 +1,9 @@
-import { Archivo, Archivo_Narrow } from 'next/font/google'
+import { archivo as display, archivoNarrow as body } from '../../_fonts/fonts'
 import { HeroVideo } from '../../_components/HeroVideo'
 import { Companions } from '../../_components/Companions'
 import { DemoButton } from '../../_components/DemoButton'
 import s from './smallport.module.css'
 
-const display = Archivo({ subsets: ['latin'], weight: ['500', '800'], variable: '--sp-display' })
-const body = Archivo_Narrow({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--sp-body' })
 const sp = (n: string) => `/landers/sprites/smallport/${n}.webp`
 
 const MANIFEST = [
