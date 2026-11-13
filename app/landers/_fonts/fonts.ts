@@ -119,3 +119,46 @@ export const archivoNarrow = localFont({
   variable: '--sp-body',
   display: 'swap',
 })
+
+// Redesign: product-grade UI faces and display faces
+export const inter = localFont({
+  src: [
+    { path: './inter-400.woff2', weight: '400', style: 'normal' },
+    { path: './inter-500.woff2', weight: '500', style: 'normal' },
+    { path: './inter-600.woff2', weight: '600', style: 'normal' },
+    { path: './inter-700.woff2', weight: '700', style: 'normal' },
+  ],
+  variable: '--f-inter',
+  display: 'swap',
+})
+
+export const interTight = localFont({
+  src: [
+    { path: './inter-tight-500.woff2', weight: '500', style: 'normal' },
+    { path: './inter-tight-600.woff2', weight: '600', style: 'normal' },
+    { path: './inter-tight-700.woff2', weight: '700', style: 'normal' },
+    { path: './inter-tight-500-italic.woff2', weight: '500', style: 'italic' },
+  ],
+  variable: '--f-inter-tight',
+  display: 'swap',
+})
+
+export const instrumentSerif = localFont({
+  src: [
+    { path: './instrument-serif-400.woff2', weight: '400', style: 'normal' },
+    { path: './instrument-serif-400-italic.woff2', weight: '400', style: 'italic' },
+  ],
+  variable: '--f-instrument',
+  display: 'swap',
+})
+
+export const fraunces = localFont({
+  src: [
+    { path: './fraunces-500.woff2', weight: '500', style: 'normal' },
+    { path: './fraunces-600.woff2', weight: '600', style: 'normal' },
+    { path: './fraunces-500-italic.woff2', weight: '500', style: 'italic' },
+    { path: './fraunces-600-italic.woff2', weight: '600', style: 'italic' },
+  ],
+  variable: '--f-fraunces',
+  display: 'swap',
+})

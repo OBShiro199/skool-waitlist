@@ -1,115 +1,146 @@
-import { caslon as display, hanken as body } from '../../_fonts/fonts'
+import { instrumentSerif } from '../../_fonts/fonts'
 import { HeroVideo } from '../../_components/HeroVideo'
 import { Companions } from '../../_components/Companions'
-import { DemoButton } from '../../_components/DemoButton'
+import k from '../../_kit/kit.module.css'
+import { Buttons, Closing, CountUp, Faq, Footer, Headline, Marquee, Nav, Pill, Pricing, Quotes, Reveal, SectionHead, Spotlight, Window } from '../../_kit/kit'
 import s from './foldwell.module.css'
 import { FoldwellCalc } from './FoldwellCalc'
 
 const sp = (n: string) => `/landers/sprites/foldwell/${n}.webp`
-
-const YEAR = [['6 Apr', 'Tax year starts', 'Connect your bank. Foldwell starts sorting.'], ['Jul', 'First check-in', 'Two minutes: confirm what we sorted.'], ['Oct', 'Second check-in', 'We flag anything that looks personal.'], ['Jan', 'You file', 'Review the pre-filled return and submit.'], ['31 Jan', 'Deadline passes quietly', 'You filed weeks ago.']]
-const FAQ = [
-  ['Is Foldwell recognised by HMRC?', 'Returns are submitted through HMRC’s software route, the same one accountants use. You get the HMRC receipt in the app.'],
-  ['What if I’m also employed?', 'Add your P60 figures and Foldwell includes them, so your return shows the whole picture.'],
-  ['What can I claim?', 'We sort into HMRC’s own expense categories and explain each one in a sentence: travel, equipment, phone, a share of your home office, and the rest.'],
-  ['What happens if I’m investigated?', 'Every receipt is kept for six years with its photo, so you can hand over the evidence in one export.'],
+const INBOX: [string, string, string, string][] = [
+  ['Stationers', 'Office costs', '£23.37', 'Today'], ['Rail ticket, Leeds', 'Travel', '£64.10', 'Yesterday'],
+  ['Laptop stand', 'Equipment', '£39.99', '12 Mar'], ['Phone bill (60% work)', 'Phone', '£18.00', '10 Mar'], ['Co-working day pass', 'Premises', '£25.00', '8 Mar'],
 ]
 
 export default function Foldwell() {
   return (
-    <div className={`${s.page} ${display.variable} ${body.variable}`}>
-      <HeroVideo src="/landers/heroes/foldwell.mp4" poster="/landers/heroes/foldwell.jpg" scrim="linear-gradient(90deg, rgba(47,74,58,.78) 0%, rgba(47,74,58,.35) 50%, rgba(47,74,58,0) 80%)">
-        <div className={s.heroInner}>
-          <span className={s.mark}>Foldwell</span>
-          <h1>Snap receipts all year.<br />File in ten minutes.</h1>
-          <p>Self-assessment for freelancers. Photograph the receipt when you get it; we sort it, and in January your return is already filled in.</p>
-          <DemoButton className={s.cta}>File with Foldwell</DemoButton>
+    <div className={`${k.root} ${s.theme} ${instrumentSerif.variable}`}>
+      <Nav brand={<><span className={s.mark} aria-hidden />Foldwell</>} links={['Product', 'Calculator', 'Pricing', 'FAQ']} cta="Start free" />
+
+      <HeroVideo src="/landers/heroes/foldwell.mp4" poster="/landers/heroes/foldwell.jpg" scrim="var(--hero-scrim)">
+        <div className={k.heroInner}>
+          <Pill>Making Tax Digital ready for April 2026</Pill>
+          <Headline text="Snap receipts all year. | File in *ten minutes*." />
+          <p className={k.lede}>Self-assessment for freelancers. Photograph the receipt when you get it; Foldwell sorts it, and in January your return is already filled in.</p>
+          <Buttons primary="Start free" secondary="Try the calculator" />
+          <div className={k.heroMeta}><span>Free until you file</span><span>Submitted to HMRC</span><span>£79 a year</span></div>
         </div>
       </HeroVideo>
 
-      <section className={`${s.layer} ${s.l1}`}>
-        <Companions spots={[{ src: sp('red-boat'), top: '10%', right: '6%', size: 120, rotate: -6 }, { src: sp('tree'), top: '6%', right: '20%', size: 110 }]} />
-        <h2>How it works</h2>
-        <div className={s.steps}>
-          <div><b>All year</b><p>Snap a receipt or forward the email. Foldwell reads it and files it under the right expense.</p></div>
-          <div><b>Every quarter</b><p>A two-minute check: we show what we sorted and flag anything odd, like a personal streaming subscription on the business card.</p></div>
-          <div><b>In January</b><p>Your return is pre-filled. Review the numbers, tap submit, and we send it straight to HMRC.</p></div>
+      <Marquee label="Filed by 12,000 freelancers, including" names={['Copywriters', 'Illustrators', 'Developers', 'Photographers', 'Consultants', 'Translators', 'Video editors', 'Tutors']} />
+
+      <section className={k.section} id="product">
+        <Companions spots={[{ src: sp('red-boat'), top: '4%', right: '5%', size: 110, rotate: -8 }]} />
+        <div className={k.wrap}>
+          <SectionHead eyebrow="Product" title={<>Snap it at the till. <em>That’s the whole job.</em></>} sub="Point the camera at a receipt or forward the email it came in. Foldwell reads the shop, the date and the amount, picks the category and tells you in plain words whether it counts." />
+          <Reveal>
+            <Window title="Foldwell · Tax year 2025–26" className={s.app}>
+              <div className={s.appGrid}>
+                <div className={s.inbox}>
+                  <div className={s.paneHead}><b>Receipts</b><span>147 sorted · 0 to check</span></div>
+                  {INBOX.map(([n, c, a, d], i) => (
+                    <div key={n} className={`${s.row} ${i === 0 ? s.rowNew : ''}`}>
+                      <span className={s.rowIcon} aria-hidden>{n[0]}</span>
+                      <div><b>{n}</b><small>{d}</small></div>
+                      <span className={s.cat}>{c}</span>
+                      <b className={s.amt}>{a}</b>
+                    </div>
+                  ))}
+                </div>
+                <div className={s.phone} aria-label="The app reading a receipt">
+                  <div className={s.notch} />
+                  <div className={s.receipt}><b>STATIONERS</b><span>14 Mar 2026 · 10:42</span><i /><p><span>A4 notebooks ×3</span><span>£14.97</span></p><p><span>Gel pens ×12</span><span>£8.40</span></p><p><span>Total</span><span>£23.37</span></p></div>
+                  <div className={s.sorted}><span>Sorted as</span><b>Office costs</b><small>Allowable · saves about £6.08</small></div>
+                </div>
+                <div className={s.estimate}>
+                  <span className={s.paneLabel}>Estimated tax for 2025–26</span>
+                  <b className={s.owed}>£4,212</b>
+                  <div className={s.split}><div><span>Income tax</span><b>£3,140</b></div><div><span>Class 4 NI</span><b>£1,072</b></div></div>
+                  <div className={s.setAside}><div><span>Set aside so far</span><b>£3,600</b></div><div className={s.meter}><i style={{ width: '85%' }} /></div><small>85% of your bill · on track for 31 Jan</small></div>
+                </div>
+              </div>
+            </Window>
+          </Reveal>
         </div>
       </section>
 
-      <section className={`${s.layer} ${s.lSnap}`}>
-        <div className={s.snapRow}>
-          <div className={s.phone} aria-label="The Foldwell app reading a receipt">
-            <div className={s.notch} />
-            <div className={s.receipt}>
-              <b>STATIONERS</b><span>14 Mar 2026 · 10:42</span><i />
-              <p><span>A4 notebooks ×3</span><span>£14.97</span></p>
-              <p><span>Gel pens ×12</span><span>£8.40</span></p>
-              <p><span>Total</span><span>£23.37</span></p>
-            </div>
-            <div className={s.sorted}><span>Sorted as</span><b>Office costs</b><small>Allowable · saves about £6.08</small></div>
+      <section className={`${k.section} ${k.alt}`} id="calculator">
+        <div className={k.wrap}>
+          <SectionHead eyebrow="Calculator" title={<>What forgetting <em>costs you</em>.</>} sub="Most freelancers under-claim. Drag the slider to what you think slipped through last year." />
+          <div className={k.bento}>
+            <Reveal className={k.span3}><Spotlight className={s.calcCell}><FoldwellCalc /></Spotlight></Reveal>
+            <Reveal className={k.span3} delay={80}><Spotlight><div className={k.cell}><h3>Where your expenses went</h3><p>Sorted into HMRC’s own categories, each explained in one sentence.</p>
+              <div className={`${k.cellVisual} ${s.donutRow}`}><div className={s.donut} role="img" aria-label="Expenses: travel 34%, equipment 26%, premises 18%, phone 12%, other 10%" /><ul>{[['Travel', '34%', '#2F4A3A'], ['Equipment', '26%', '#8DA67B'], ['Premises', '18%', '#C2452D'], ['Phone', '12%', '#D9B77A'], ['Other', '10%', '#B9B3A3']].map(([n, v, c]) => <li key={n}><i style={{ background: c }} />{n}<b>{v}</b></li>)}</ul></div></div></Spotlight></Reveal>
+            <Reveal className={k.span2}><Spotlight><div className={k.cell}><h3>Submitted to HMRC</h3><p>Through the same software route accountants use.</p><div className={`${k.cellVisual} ${s.hmrc}`}><span className={s.okDot} />Return accepted · ref 7741-2290</div></div></Spotlight></Reveal>
+            <Reveal className={k.span2} delay={60}><Spotlight><div className={k.cell}><h3>Bank feeds</h3><p>Connect your business account and income is matched on its own.</p><div className={`${k.cellVisual} ${s.bank}`}><span>Invoice #212 · £1,800</span><b>Matched</b></div></div></Spotlight></Reveal>
+            <Reveal className={k.span2} delay={120}><Spotlight><div className={k.cell}><h3>Six years of evidence</h3><p>Every receipt kept with its photo, in one export if HMRC ever asks.</p><div className={`${k.cellVisual} ${s.vault}`}>{['2021', '2022', '2023', '2024', '2025', '2026'].map((y) => <span key={y}>{y}</span>)}</div></div></Spotlight></Reveal>
           </div>
-          <div>
-            <h2>Snap it at the till. That’s the whole job.</h2>
-            <p className={s.lead}>Point the camera at a receipt, or forward the email it came in. Foldwell reads the shop, the date and the amount, decides the category, and tells you in plain words whether it counts.</p>
+        </div>
+      </section>
+
+      <section className={k.section}>
+        <div className={k.wrap}>
+          <div className={k.stats}>
+            <div className={k.stat}><b><CountUp to={1140} prefix="£" /></b><span>average expenses users had been forgetting</span></div>
+            <div className={k.stat}><b><CountUp to={10} suffix=" min" /></b><span>median time to file in January</span></div>
+            <div className={k.stat}><b><CountUp to={12000} /></b><span>freelancers filed with Foldwell</span></div>
+            <div className={k.stat}><b>0</b><span>spreadsheets to keep</span></div>
           </div>
         </div>
       </section>
 
-      <section className={`${s.layer} ${s.l2}`}>
-        <Companions spots={[{ src: sp('house'), top: '8%', right: '5%', size: 130 }, { src: sp('cloud'), top: '66%', right: '6%', size: 140 }]} />
-        <h2>What you get back</h2>
-        <div className={s.points}>
-          <p><span>£1,140</span>average expenses our beta users had been forgetting to claim.</p>
-          <p><span>10 min</span>median time from opening the app in January to a submitted return.</p>
-          <p><span>0 spreadsheets</span>to keep. Your bank feed and your camera are enough.</p>
+      <section className={`${k.section} ${k.alt}`} id="how-it-works">
+        <Companions spots={[{ src: sp('house'), top: '6%', right: '5%', size: 120 }]} />
+        <div className={k.wrap}>
+          <SectionHead eyebrow="How it works" title={<>Your tax year, <em>folded flat</em>.</>} />
+          <ol className={s.year}>
+            {[['6 Apr', 'Tax year starts', 'Connect your bank. Foldwell starts sorting.'], ['July', 'First check-in', 'Two minutes: confirm what we sorted.'], ['October', 'Second check-in', 'We flag anything that looks personal.'], ['January', 'You file', 'Review the pre-filled return and submit.'], ['31 Jan', 'The deadline passes quietly', 'You filed weeks ago.']].map(([d, h, p], i) => (
+              <Reveal key={d} as="li" delay={i * 80}><span>{d}</span><b>{h}</b><p>{p}</p></Reveal>
+            ))}
+          </ol>
         </div>
       </section>
 
-      <section className={`${s.layer} ${s.lCalc}`}>
-        <div className={s.calcRowWrap}>
-          <div>
-            <h2>What forgetting costs you.</h2>
-            <p className={s.lead}>Most freelancers we spoke to under-claim. Drag the slider to the amount you think slipped through last year.</p>
-          </div>
-          <FoldwellCalc />
+      <section className={k.section}>
+        <div className={k.wrap}>
+          <SectionHead eyebrow="Freelancers" title={<>January used to be <em>the worst month</em>.</>} />
+          <Quotes items={[
+            { text: 'I used to spend the first two weekends of January in a shoebox of receipts. This year I filed on a Tuesday lunchtime.', name: 'Leah Morgan', role: 'Freelance illustrator' },
+            { text: 'It found £900 of travel I’d never claimed. That paid for the next ten years of Foldwell.', name: 'Chris Adeyemi', role: 'Video editor' },
+            { text: 'The quarterly check-in takes two minutes. I actually do it.', name: 'Hannah Clarke', role: 'Copywriter' },
+            { text: 'Knowing how much to set aside each month changed how I sleep.', name: 'Ravi Shah', role: 'Software contractor' },
+            { text: 'Plain English everywhere. I finally understand what I can claim.', name: 'Ella Fischer', role: 'Photographer' },
+            { text: 'My accountant was going to charge £400. Foldwell was £79 and took ten minutes.', name: 'Jamie Doyle', role: 'Tutor' },
+          ]} />
         </div>
       </section>
 
-      <section className={`${s.layer} ${s.lYear}`}>
-        <h2>Your tax year, folded flat.</h2>
-        <ol className={s.year}>
-          {YEAR.map(([d, h, p]) => <li key={d}><span>{d}</span><b>{h}</b><p>{p}</p></li>)}
-        </ol>
-      </section>
-
-      <section className={`${s.layer} ${s.l3}`}>
-        <Companions spots={[{ src: sp('sun'), top: '6%', right: '8%', size: 140 }]} />
-        <h2>One plan. Pay when you file.</h2>
-        <div className={s.plan}>
-          <p className={s.big}>£79 <small>per tax year</small></p>
-          <ul>
-            <li>Unlimited receipts and bank feeds</li>
-            <li>Quarterly check-ins and Making Tax Digital ready</li>
-            <li>Your return submitted to HMRC</li>
-            <li>Free until you file, so try it all year</li>
-          </ul>
-          <DemoButton className={s.cta}>Start free</DemoButton>
+      <section className={`${k.section} ${k.alt}`} id="pricing">
+        <div className={k.wrap}>
+          <SectionHead eyebrow="Pricing" title={<>One plan. <em>Pay when you file.</em></>} sub="Use everything free all year. You only pay when your return is submitted." />
+          <Pricing plans={[
+            { name: 'Snap', price: '£0', per: 'all year', blurb: 'Sort receipts and track tax, no return.', features: ['Unlimited receipts', 'Bank feeds', 'Tax set-aside tracker'], cta: 'Start free' },
+            { name: 'File', price: '£79', per: 'per tax year', blurb: 'Your return, pre-filled and submitted to HMRC.', features: ['Everything in Snap', 'Pre-filled return', 'Submitted to HMRC', 'Quarterly check-ins', 'Six-year evidence vault'], featured: true, cta: 'Start free, pay to file' },
+            { name: 'File + review', price: '£199', per: 'per tax year', blurb: 'A chartered accountant checks it before it goes.', features: ['Everything in File', 'Accountant review', 'Help if HMRC asks questions'], cta: 'Add a review' },
+          ]} />
         </div>
       </section>
 
-      <section className={`${s.layer} ${s.lFaq}`}>
-        <h2>Fair questions</h2>
-        <div className={s.faq}>{FAQ.map(([q, a]) => <details key={q}><summary>{q}</summary><p>{a}</p></details>)}</div>
+      <section className={k.section} id="faq">
+        <div className={k.wrap}>
+          <SectionHead eyebrow="FAQ" title={<>Fair <em>questions</em>.</>} />
+          <Faq items={[
+            ['Is Foldwell recognised by HMRC?', 'Returns are submitted through HMRC’s software route, the same one accountants use. You get the HMRC receipt in the app.'],
+            ['What if I’m also employed?', 'Add your P60 figures and Foldwell includes them, so your return shows the whole picture.'],
+            ['What can I claim?', 'We sort into HMRC’s own expense categories and explain each in a sentence: travel, equipment, phone, a share of your home office and more.'],
+            ['What happens if I’m investigated?', 'Every receipt is kept for six years with its photo, so you can hand over the evidence in one export.'],
+          ]} />
+        </div>
       </section>
 
-      <section className={`${s.layer} ${s.lClose}`}>
-        <Companions spots={[{ src: sp('red-boat'), top: '30%', right: '12%', size: 120 }, { src: sp('cloud'), top: '14%', left: '8%', size: 140 }]} />
-        <h2>Start snapping today. File in January.</h2>
-        <DemoButton className={s.cta}>Start free</DemoButton>
-      </section>
-
-      <footer className={s.footer}>Foldwell · A fictional startup from Lander Library</footer>
+      <Closing video="/landers/heroes/foldwell.mp4" poster="/landers/heroes/foldwell.jpg" title={<>Start snapping today. <em>File in January.</em></>} sub="Free until you file. Ten minutes when you do." cta="Start free" />
+      <Footer brand={<><span className={s.mark} aria-hidden />Foldwell</>} cols={[['Product', ['Receipt capture', 'Bank feeds', 'Self-assessment', 'Calculator']], ['Learn', ['What can I claim?', 'Tax dates', 'Making Tax Digital']], ['Help', ['Contact', 'Security', 'Status']]]} />
+      <div className={k.grain} aria-hidden />
     </div>
   )
 }
