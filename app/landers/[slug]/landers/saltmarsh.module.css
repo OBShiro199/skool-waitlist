@@ -1,0 +1,32 @@
+.page { --paper: #F4EFE6; --sea: #5B7F8E; --ochre: #C79A4B; --ink: #2A2B2E; background: var(--paper); color: var(--ink); font-family: var(--sm-body), sans-serif; }
+.hero { min-height: 92svh; }
+.heroInner { width: 100%; max-width: 1100px; margin: 0 auto; padding: 48px clamp(20px, 6vw, 80px); display: grid; align-content: start; gap: 16px; }
+.mark { font-family: var(--sm-display), serif; font-size: 22px; letter-spacing: .04em; }
+.heroInner h1 { font-family: var(--sm-display), serif; font-weight: 400; font-size: clamp(42px, 6.4vw, 92px); line-height: .98; margin: 18px 0 4px; color: var(--ink); }
+.heroInner h1 em { font-style: italic; }
+.heroInner p { margin: 0; max-width: 460px; font-size: 16.5px; line-height: 1.65; color: rgba(42,43,46,.85); }
+.cta { justify-self: start; margin-top: 8px; background: var(--sea); color: var(--paper); border: 0; padding: 13px 22px; font: 500 15px/1 var(--sm-body), sans-serif; cursor: pointer; border-radius: 2px; }
+.deckle { height: 28px; margin-top: -27px; position: relative; z-index: 2; background: var(--paper);
+  -webkit-mask: radial-gradient(10px 14px at 10px 0, transparent 98%, #000) 0 0 / 20px 100% repeat-x;
+          mask: radial-gradient(10px 14px at 10px 0, transparent 98%, #000) 0 0 / 20px 100% repeat-x; }
+.how, .margin, .who { position: relative; max-width: 1100px; margin: 0 auto; padding: clamp(64px, 10vw, 130px) clamp(20px, 6vw, 80px); }
+.how h2, .margin h2, .who h2 { font-family: var(--sm-display), serif; font-weight: 400; font-size: clamp(34px, 4.4vw, 56px); margin: 0 0 36px; color: var(--sea); }
+.columns { columns: 3 240px; column-gap: 48px; }
+.columns p { break-inside: avoid; margin: 0 0 22px; line-height: 1.75; font-size: 16px; }
+.columns b { font-weight: 500; display: block; color: var(--ink); }
+.margin { border-top: 1px solid rgba(42,43,46,.15); }
+.notes { margin: 0; display: grid; gap: 0; max-width: 760px; }
+.notes > div { display: grid; grid-template-columns: 200px 1fr; gap: 24px; padding: 20px 0; border-bottom: 1px dashed rgba(91,127,142,.4); }
+.notes dt { font-family: var(--sm-display), serif; font-style: italic; font-size: 22px; color: var(--ochre); }
+.notes dd { margin: 0; line-height: 1.7; }
+.who { text-align: center; }
+.whoLead { font-family: var(--sm-display), serif; font-size: 26px; line-height: 1.4; max-width: 640px; margin: 0 auto 28px; }
+.price { display: grid; gap: 8px; margin-bottom: 28px; font-size: 16px; }
+.price p { margin: 0; }
+.price span { font-family: var(--sm-display), serif; font-style: italic; font-size: 21px; color: var(--sea); margin-right: 8px; }
+.who .cta { justify-self: center; }
+.footer { text-align: center; padding: 28px 20px 90px; font-size: 13.5px; color: rgba(42,43,46,.6); border-top: 1px solid rgba(42,43,46,.12); }
+@media (max-width: 760px) { .notes > div { grid-template-columns: 1fr; gap: 4px; } }
+
+/* the site sets every heading to near-black; here headings take their section colour */
+.page :is(h1, h2, h3) { color: inherit; }

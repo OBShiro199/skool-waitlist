@@ -1,0 +1,40 @@
+.page { --cream: #F6EBDD; --terra: #C8553D; --dough: #E9C995; --cocoa: #3B2A20; background: var(--cream); color: var(--cocoa); font-family: var(--pb-body), sans-serif; }
+.window { padding: 14px; }
+.hero { border-radius: 36px; min-height: calc(100svh - 28px); }
+.heroInner { width: 100%; display: grid; place-content: center; justify-items: center; text-align: center; gap: 18px; padding: 48px 20px; color: #FFF8EE; }
+.sign { font-family: var(--pb-display), serif; font-size: 18px; padding: 6px 18px; border: 2px solid rgba(255,248,238,.7); border-radius: 999px; }
+.heroInner h1 { font-family: var(--pb-display), serif; font-weight: 400; font-size: clamp(36px, 6vw, 78px); line-height: 1.02; margin: 0; max-width: 900px; text-shadow: 0 2px 24px rgba(59,42,32,.35); }
+.heroInner p { margin: 0; max-width: 520px; font-size: 17px; line-height: 1.55; }
+.cta { background: var(--terra); color: #FFF8EE; border: 0; border-radius: 999px; padding: 15px 26px; font: 600 15px/1 var(--pb-body), sans-serif; cursor: pointer; box-shadow: 0 6px 0 #8f3a28; }
+.cta:active { transform: translateY(3px); box-shadow: 0 3px 0 #8f3a28; }
+.how, .benefits, .menu { position: relative; padding: clamp(72px, 10vw, 140px) clamp(20px, 5vw, 72px); }
+.how h2 { font-family: var(--pb-display), serif; font-weight: 400; font-size: clamp(32px, 4vw, 52px); text-align: center; margin: 0 0 48px; }
+.recipe { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; max-width: 1080px; margin: 0 auto; }
+.recipe > div { padding: 0 28px; display: grid; gap: 10px; align-content: start; }
+.recipe > div + div { border-left: 2px dotted rgba(59,42,32,.25); }
+.recipe span { width: 44px; height: 44px; border-radius: 50%; background: var(--dough); display: grid; place-items: center; font-family: var(--pb-display), serif; font-size: 20px; }
+.recipe h3 { margin: 4px 0 0; font-family: var(--pb-display), serif; font-weight: 400; font-size: 22px; }
+.recipe p { margin: 0; line-height: 1.6; color: rgba(59,42,32,.82); }
+.benefits { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; background: var(--dough); border-radius: 36px; margin: 0 14px; }
+.lead h2 { font-family: var(--pb-display), serif; font-weight: 400; font-size: clamp(30px, 3.6vw, 48px); line-height: 1.08; margin: 0; }
+.notes { list-style: none; padding: 0; margin: 0; display: grid; gap: 22px; font-size: 16.5px; line-height: 1.6; }
+.notes b { display: block; font-weight: 600; color: var(--terra); }
+.menu { display: grid; place-items: center; }
+.board { width: min(620px, 100%); background: var(--cocoa); color: #FBEFDD; border-radius: 22px; padding: clamp(28px, 5vw, 52px); display: grid; gap: 6px; box-shadow: 0 30px 50px -30px rgba(59,42,32,.7); border: 10px solid #5a4030; }
+.board h2 { font-family: var(--pb-display), serif; font-weight: 400; font-size: 34px; text-align: center; margin: 0 0 22px; }
+.item { display: flex; align-items: baseline; gap: 10px; font-family: var(--pb-display), serif; font-size: 22px; margin-top: 14px; }
+.item i { flex: 1; border-bottom: 2px dotted rgba(251,239,221,.4); transform: translateY(-5px); }
+.item b { font-weight: 400; color: var(--dough); }
+.board p { margin: 0; color: rgba(251,239,221,.7); font-size: 14.5px; }
+.board .cta { margin-top: 28px; justify-self: center; }
+.footer { text-align: center; padding: 32px 20px 90px; font-size: 13px; color: rgba(59,42,32,.6); }
+@media (max-width: 760px) {
+  .window { padding: 8px; }
+  .hero { border-radius: 24px; }
+  .recipe { grid-template-columns: 1fr; gap: 32px; }
+  .recipe > div + div { border-left: 0; }
+  .benefits { grid-template-columns: 1fr; gap: 28px; margin: 0 8px; border-radius: 24px; }
+}
+
+/* the site sets every heading to near-black; here headings take their section colour */
+.page :is(h1, h2, h3) { color: inherit; }
