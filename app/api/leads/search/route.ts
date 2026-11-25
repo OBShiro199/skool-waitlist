@@ -4,6 +4,11 @@ import { asksForMobiles, type Filters } from '@/lib/leads/filters'
 import { searchConfigured, searchIds } from '@/lib/leads/typesense'
 import { rowsByIds, rowsConfigured } from '@/lib/leads/rows'
 import { mockEnabled, mockSearch } from '@/lib/leads/mock'
+import { memo, stableKey } from '@/lib/leads/cache'
+import type { LeadRow } from '@/lib/leads/rows'
+
+// Search results for 5 minutes, up to 400 pages, shared by all members on this server.
+const results = memo<{ ids: string[]; count: number; rows?: LeadRow[]; notice?: 'no_mobiles' }>(400, 5 * 60_000)
 
 export const dynamic = 'force-dynamic'
 
@@ -33,14 +38,19 @@ export async function POST(req: Request) {
 
   if (!searchConfigured() || !rowsConfigured()) return json({ error: 'search_not_configured' }, 503)
   try {
-    const { ids, count, missingMobileFields } = await searchIds(DATASETS[dataset].alias, filters, offset, limit)
-    if (missingMobileFields) {
-      return json(idsOnly ? { ids: [], count: { n: 0, exact: true }, took_ms: 0 } : { rows: [], count: { n: 0, exact: true }, took_ms: 0, notice: 'no_mobiles' })
+    const key = stableKey([dataset, filters, offset, limit])
+    let hit = results.get(key)
+    if (!hit) {
+      const { ids, count, missingMobileFields } = await searchIds(DATASETS[dataset].alias, filters, offset, limit)
+      hit = missingMobileFields ? { ids: [], count: 0, rows: [], notice: 'no_mobiles' } : { ids, count }
+      results.set(key, hit)
     }
-    const n = { n: count, exact: true }
-    if (idsOnly) return json({ ids, count: n, took_ms: Date.now() - started })
-    const rows = ids.length ? await rowsByIds(dataset, ids) : []
-    return json({ rows, count: n, took_ms: Date.now() - started })
+    const n = { n: hit.count, exact: true }
+    if (idsOnly) return json({ ids: hit.ids, count: n, took_ms: Date.now() - started })
+    if (!hit.rows) {
+      hit.rows = hit.ids.length ? await rowsByIds(dataset, hit.ids) : []
+    }
+    return json({ rows: hit.rows, count: n, took_ms: Date.now() - started, ...(hit.notice ? { notice: hit.notice } : {}) })
   } catch (e) {
     console.error('leads search failed', dataset, e instanceof Error ? e.message : e)
     return json({ error: 'search_failed', message: 'Search is unavailable right now. Try again in a moment.' }, 502)

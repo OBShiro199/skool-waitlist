@@ -1,6 +1,13 @@
 import 'server-only'
 import type { DatasetId } from './datasets'
 import { leadsDb } from './rows'
+import generated from './facet-values.json'
+
+// Every filter's options with lead counts, measured from the live search index by
+// scripts/leads-facets.py (values sampled from real rows, each counted exactly). Used until the
+// nightly dashboard_facets table exists in the Decibel database.
+const GENERATED = generated as unknown as { datasets: Record<DatasetId, Record<string, [string, number][]>> }
+const cache = new Map<DatasetId, { at: number; value: { facets: Facets; counts: boolean } }>()
 
 export type Facets = Record<string, { value: string; n: number | null }[]>
 
@@ -25,6 +32,14 @@ const FIXED: Record<string, string[]> = {
 
 /** Options for every filter in this dataset, ordered by facet, then count, then value (PRD 9). */
 export async function facetsFor(dataset: DatasetId): Promise<{ facets: Facets; counts: boolean }> {
+  const hit = cache.get(dataset)
+  if (hit && Date.now() - hit.at < 30 * 60_000) return hit.value
+  const value = await loadFacets(dataset)
+  cache.set(dataset, { at: Date.now(), value })
+  return value
+}
+
+async function loadFacets(dataset: DatasetId): Promise<{ facets: Facets; counts: boolean }> {
   const db = leadsDb()
   if (db) {
     const rows: { facet: string; value: string; n: number }[] = []
@@ -48,6 +63,12 @@ export async function facetsFor(dataset: DatasetId): Promise<{ facets: Facets; c
         break
       }
     }
+  }
+  const measured = GENERATED.datasets?.[dataset]
+  if (measured && Object.keys(measured).length) {
+    const facets: Facets = {}
+    for (const [k, vals] of Object.entries(measured)) facets[k] = vals.map(([value, n]) => ({ value, n }))
+    return { facets, counts: true }
   }
   const facets: Facets = {}
   for (const [k, vals] of Object.entries(FIXED)) {

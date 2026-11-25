@@ -21,11 +21,18 @@ export async function searchIds(alias: string, f: Filters, offset: number, limit
       limit: String(step),
       include_fields: 'id',
       num_typos: '0',
-      prefix: 'true',
       drop_tokens_threshold: '0',
       typo_tokens_threshold: '0',
-      exhaustive_search: 'true',
+      // Typesense keeps identical searches in memory for 10 minutes, shared by every member.
+      use_cache: 'true',
+      cache_ttl: '600',
     })
+    // Prefix and exhaustive matching only matter when there is text to match; on filter-only
+    // searches across millions of leads they cost seconds and change nothing.
+    if (p.query_by) {
+      params.set('prefix', 'true')
+      params.set('exhaustive_search', 'true')
+    }
     if (p.query_by) params.set('query_by', p.query_by)
     if (!p.filter_by) params.delete('filter_by')
     const res = await fetch(`${url()}/collections/${alias}/documents/search?${params}`, {

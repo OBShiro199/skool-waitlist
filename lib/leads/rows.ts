@@ -98,22 +98,32 @@ function shape(r: Raw): LeadRow {
  * Full rows for these ids, in the order given (PRD 8). Uses dashboard_leads_by_ids when it has been
  * added to the Decibel database; otherwise selects by id and reorders here. Missing ids are skipped.
  */
+let rpcMissing = false
+
 export async function rowsByIds(dataset: DatasetId, ids: string[]): Promise<LeadRow[]> {
   if (!ids.length) return []
   if (ids.length > 1000) throw new Error('too_many_ids')
   const db = leadsDb()
   if (!db) throw new Error('rows_not_configured')
 
-  const rpc = await db.rpc('dashboard_leads_by_ids', { p_dataset: dataset, p_ids: ids })
-  if (!rpc.error) return rpc.data as LeadRow[]
-  if (rpc.error.code !== 'PGRST202' && rpc.error.code !== '42883') throw new Error(rpc.error.message)
-
-  const out: Raw[] = []
-  for (let i = 0; i < ids.length; i += 200) {
-    const { data, error } = await db.from(DATASETS[dataset].table).select(COLS).in('contact_id', ids.slice(i, i + 200))
-    if (error) throw new Error(error.message)
-    out.push(...((data ?? []) as unknown as Raw[]))
+  if (!rpcMissing) {
+    const rpc = await db.rpc('dashboard_leads_by_ids', { p_dataset: dataset, p_ids: ids })
+    if (!rpc.error) return rpc.data as LeadRow[]
+    if (rpc.error.code !== 'PGRST202' && rpc.error.code !== '42883') throw new Error(rpc.error.message)
+    rpcMissing = true // not in the Decibel database yet: stop paying for the failed call on every page
   }
+
+  const chunks: string[][] = []
+  for (let i = 0; i < ids.length; i += 200) chunks.push(ids.slice(i, i + 200))
+  const out: Raw[] = (
+    await Promise.all(
+      chunks.map(async (chunk) => {
+        const { data, error } = await db.from(DATASETS[dataset].table).select(COLS).in('contact_id', chunk)
+        if (error) throw new Error(error.message)
+        return (data ?? []) as unknown as Raw[]
+      }),
+    )
+  ).flat()
   const byId = new Map(out.map((r) => [r.contact_id as string, r]))
   return ids.map((id) => byId.get(id)).filter((r): r is Raw => !!r).map(shape)
 }
