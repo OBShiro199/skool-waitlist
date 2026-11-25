@@ -4,7 +4,7 @@ export type Filters = Record<string, unknown>
 
 // Input sanitising (PRD 7.2). Hashed values are never cleaned: they become integers.
 export const list = (f: Filters, k: string): string[] =>
-  Array.isArray(f[k]) ? (f[k] as unknown[]).filter((x): x is string => typeof x === 'string' && x.trim() !== '').slice(0, 50) : []
+  Array.isArray(f[k]) ? (f[k] as unknown[]).filter((x): x is string => typeof x === 'string' && x.trim() !== '').slice(0, 80) : []
 export const bool = (f: Filters, k: string): boolean | null => (typeof f[k] === 'boolean' ? (f[k] as boolean) : null)
 export const int = (f: Filters, k: string): number | null =>
   typeof f[k] === 'number' && Number.isFinite(f[k]) ? Math.round(f[k] as number) : null
@@ -20,12 +20,27 @@ const contains = (field: string, values: string[]) => {
 }
 const exact = (field: string, values: string[]) => (values.length ? `${field}:=[${values.map(crc).join(', ')}]` : null)
 
-/** Whole days since 1970-01-01 for "today in UTC minus N calendar months". */
+/** Whole days since 1970-01-01 for "today in UTC minus N calendar months" (31 March minus 1 month is 28/29 Feb, not 3 March). */
 export function daysAgoMonths(months: number, now = new Date()): number {
-  const d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()))
-  d.setUTCMonth(d.getUTCMonth() - months)
-  return Math.floor(d.getTime() / 86_400_000)
+  const total = now.getUTCFullYear() * 12 + now.getUTCMonth() - months
+  const y = Math.floor(total / 12)
+  const m = total - y * 12
+  const lastDay = new Date(Date.UTC(y, m + 1, 0)).getUTCDate()
+  return Math.floor(Date.UTC(y, m, Math.min(now.getUTCDate(), lastDay)) / 86_400_000)
 }
+
+/** A min/max pair clamped to sane bounds and put the right way round (500 to 7 means 7 to 500). */
+function range(f: Filters, kMin: string, kMax: string, lo: number, hi: number): [number | null, number | null] {
+  const clamp = (v: number | null) => (v === null ? null : Math.min(hi, Math.max(lo, v)))
+  let a = clamp(int(f, kMin))
+  let b = clamp(int(f, kMax))
+  if (a !== null && b !== null && a > b) [a, b] = [b, a]
+  return [a, b]
+}
+
+/** "https://www.Acme.co.uk/about" → "acme.co.uk", so pasted links match the stored domain. */
+export const bareDomain = (v: string) =>
+  v.trim().toLowerCase().replace(/^[a-z]+:\/\//, '').replace(/^www\./, '').replace(/[/?#].*$/, '').replace(/:\d+$/, '')
 
 const BOOLS: [string, string][] = [
   ['hasMobile', 'has_mobile'],
@@ -52,8 +67,7 @@ export function toTypesense(f: Filters, now = new Date()) {
     c.push(`main_industry_h:!=[${h}] && company_industry_h:!=[${h}]`)
   }
   c.push(exact('size_h', list(f, 'sizes')))
-  const eMin = int(f, 'employeesMin')
-  const eMax = int(f, 'employeesMax')
+  const [eMin, eMax] = range(f, 'employeesMin', 'employeesMax', 0, 10_000_000)
   if (eMin !== null) c.push(`employees:>=${eMin}`)
   if (eMax !== null) c.push(`employees:<=${eMax}`)
   c.push(exact('revenue_h', list(f, 'revenues')))
@@ -61,7 +75,7 @@ export function toTypesense(f: Filters, now = new Date()) {
   c.push(exact('hq_country_h', list(f, 'hqCountries')))
   c.push(contains('location', list(f, 'cities')))
   c.push(contains('company', list(f, 'companies')))
-  c.push(contains('company_domain', list(f, 'domains')))
+  c.push(contains('company_domain', list(f, 'domains').map(bareDomain)))
   c.push(exact('mobile_codes_h', list(f, 'mobileCodes').filter((v) => /^\+[0-9]{1,4}$/.test(v))))
   c.push(exact('email_status_h', list(f, 'emailStatus')))
   c.push(exact('funding_h', list(f, 'funding')))
@@ -69,12 +83,10 @@ export function toTypesense(f: Filters, now = new Date()) {
     const b = bool(f, key)
     if (b !== null) c.push(`${field}:=${b}`)
   }
-  const tMin = int(f, 'tenureMin')
-  const tMax = int(f, 'tenureMax')
+  const [tMin, tMax] = range(f, 'tenureMin', 'tenureMax', 0, 1200)
   if (tMin !== null) c.push(`role_start:<=${daysAgoMonths(tMin, now)}`)
   if (tMax !== null) c.push(`role_start:>=${daysAgoMonths(tMax, now)}`)
-  const fMin = int(f, 'foundedMin')
-  const fMax = int(f, 'foundedMax')
+  const [fMin, fMax] = range(f, 'foundedMin', 'foundedMax', 1600, 2200)
   if (fMin !== null) c.push(`founded:>=${fMin}`)
   if (fMax !== null) c.push(`founded:<=${fMax}`)
   c.push(contains('smart_tags', list(f, 'tags')))

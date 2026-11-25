@@ -6,6 +6,11 @@ const key = () => process.env.TYPESENSE_SEARCH_KEY
 
 export const searchConfigured = () => !!url() && !!key()
 
+// Lazy filtering walks big filter matches instead of building them in full first. It makes broad
+// filters (an employee range, a size bucket) far cheaper on millions of leads. Older Typesense
+// servers reject the parameter; then we stop sending it.
+let lazyFilter = true
+
 /** Matching ids (in Typesense order) and the exact count. Steps 250 hits at a time (PRD 7.5). */
 export async function searchIds(alias: string, f: Filters, offset: number, limit: number) {
   const p = toTypesense(f)
@@ -23,10 +28,11 @@ export async function searchIds(alias: string, f: Filters, offset: number, limit
       num_typos: '0',
       drop_tokens_threshold: '0',
       typo_tokens_threshold: '0',
-      // Typesense keeps identical searches in memory for 10 minutes, shared by every member.
+      // Typesense keeps identical searches in memory for 30 minutes, shared by every member.
       use_cache: 'true',
-      cache_ttl: '600',
+      cache_ttl: '1800',
     })
+    if (lazyFilter && p.filter_by) params.set('enable_lazy_filter', 'true')
     // Prefix and exhaustive matching only matter when there is text to match; on filter-only
     // searches across millions of leads they cost seconds and change nothing.
     if (p.query_by) {
@@ -41,6 +47,10 @@ export async function searchIds(alias: string, f: Filters, offset: number, limit
     })
     if (!res.ok) {
       const text = await res.text()
+      if (lazyFilter && res.status === 400 && /lazy/i.test(text)) {
+        lazyFilter = false
+        continue // same page again, without the parameter
+      }
       // An index loaded before the mobile fields existed: answer "no matches, with a reason" rather than an error.
       if (res.status < 500 && /field named `?(has_mobile|mobile_codes_h)/.test(text)) return { ids: [], count: 0, missingMobileFields: true }
       console.error('typesense', res.status, text.slice(0, 300), alias, p.filter_by)
