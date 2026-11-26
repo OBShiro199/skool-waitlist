@@ -90,6 +90,12 @@ export function toTypesense(f: Filters, now = new Date()) {
   if (fMin !== null) c.push(`founded:>=${fMin}`)
   if (fMax !== null) c.push(`founded:<=${fMax}`)
   c.push(contains('smart_tags', list(f, 'tags')))
+  // Keywords: any of the words in the job title, company name, skills or tech stack
+  const kw = list(f, 'keywords')
+  if (kw.length) {
+    const parts = ['current_title', 'company', 'skills', 'tech'].map((field) => contains(field, kw)).filter(Boolean)
+    if (parts.length) c.push(`(${parts.join(' || ')})`)
+  }
   c.push(contains('skills', list(f, 'skills')))
   c.push(contains('languages', list(f, 'languages')))
   c.push(contains('tech', list(f, 'tech')))

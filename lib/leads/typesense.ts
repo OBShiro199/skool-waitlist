@@ -1,5 +1,7 @@
 import 'server-only'
+import { unstable_cache } from 'next/cache'
 import { toTypesense, type Filters } from './filters'
+import { stableKey } from './cache'
 
 const url = () => process.env.TYPESENSE_URL?.replace(/\/$/, '')
 const key = () => process.env.TYPESENSE_SEARCH_KEY
@@ -11,8 +13,26 @@ export const searchConfigured = () => !!url() && !!key()
 // servers reject the parameter; then we stop sending it.
 let lazyFilter = true
 
-/** Matching ids (in Typesense order) and the exact count. Steps 250 hits at a time (PRD 7.5). */
-export async function searchIds(alias: string, f: Filters, offset: number, limit: number) {
+type Result = { ids: string[]; count: number; missingMobileFields: boolean }
+
+// Ids and counts (never contact details) kept in Vercel's shared data cache for an hour and then
+// refreshed in the background, so a search anyone has run before answers at once on any server,
+// even after a quiet night. The big US collection takes 2 to 4 seconds per new search on the
+// search server; repeats cost nothing.
+const cachedSearch = unstable_cache(
+  async (alias: string, f: Filters, offset: number, limit: number): Promise<Result> => searchIdsLive(alias, f, offset, limit),
+  ['leads-search-v1'],
+  { revalidate: 3600, tags: ['leads-search'] },
+)
+
+/** Matching ids (in Typesense order) and the exact count. */
+export async function searchIds(alias: string, f: Filters, offset: number, limit: number): Promise<Result> {
+  // unstable_cache keys on its arguments; normalise the filters so key order doesn't matter
+  return cachedSearch(alias, JSON.parse(stableKey(f)) as Filters, offset, limit)
+}
+
+/** Straight to Typesense. Steps 250 hits at a time (PRD 7.5). */
+async function searchIdsLive(alias: string, f: Filters, offset: number, limit: number): Promise<Result> {
   const p = toTypesense(f)
   const ids: string[] = []
   let found = 0
