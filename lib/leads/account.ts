@@ -42,18 +42,21 @@ export async function exportedThisMonth(user: VaultUser): Promise<number> {
   return Number(data ?? 0)
 }
 
-export async function logExport(user: VaultUser, x: { dataset: string; leadIds: string[]; kind: 'selected' | 'all' | 'list'; filters?: unknown; label?: string }) {
+/** Logs one export batch and returns its id (used to download it again). */
+export async function logExport(user: VaultUser, x: { dataset: string; leadIds: string[]; kind: 'selected' | 'all' | 'list'; filters?: unknown; label?: string }): Promise<number | null> {
   const db = siteDb()
   const label = x.label?.slice(0, 160) ?? null
   if (!db) {
-    mem.exports.push({ id: mem.exports.length + 1, user: user.id, dataset: x.dataset, rows: x.leadIds.length, kind: x.kind, label, filters: x.filters ?? null, lead_ids: x.leadIds, created_at: new Date().toISOString() })
-    return
+    const id = mem.exports.length + 1
+    mem.exports.push({ id, user: user.id, dataset: x.dataset, rows: x.leadIds.length, kind: x.kind, label, filters: x.filters ?? null, lead_ids: x.leadIds, created_at: new Date().toISOString() })
+    return id
   }
-  const { error } = await db.from('vault_exports').insert({
+  const { data, error } = await db.from('vault_exports').insert({
     user_id: user.id, username: user.handle, dataset: x.dataset, rows: x.leadIds.length, kind: x.kind,
     lead_ids: x.leadIds.slice(0, 1000), filters: x.filters ?? null, label,
-  })
+  }).select('id').single()
   fail(error)
+  return (data?.id as number | undefined) ?? null
 }
 
 export async function listExports(user: VaultUser): Promise<ExportRecord[]> {

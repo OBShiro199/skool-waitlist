@@ -1,5 +1,6 @@
 import { vaultUser } from '@/lib/vault-auth'
 import { changePassword } from '@/lib/vault-members'
+import { revokeConnections } from '@/lib/mcp/members'
 import { limited } from '@/lib/rate-limit'
 import { json } from '@/lib/leads/guard'
 import { body, handle, str } from '@/lib/vault-route'
@@ -13,6 +14,8 @@ export async function POST(req: Request) {
     const next = str(b.next, 200)
     if (next.length < 8) return json({ error: 'weak_password', message: 'Choose a password of at least 8 characters.' }, 400)
     await changePassword(user, str(b.current, 200), next)
+    // a new password also signs Claude out, like any other session
+    await revokeConnections(user.id).catch(() => {})
     return json({ ok: true })
   })
 }
