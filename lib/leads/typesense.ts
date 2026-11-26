@@ -1,7 +1,6 @@
 import 'server-only'
 import { unstable_cache } from 'next/cache'
 import { toTypesense, type Filters } from './filters'
-import { stableKey } from './cache'
 
 const url = () => process.env.TYPESENSE_URL?.replace(/\/$/, '')
 const key = () => process.env.TYPESENSE_SEARCH_KEY
@@ -19,21 +18,22 @@ type Result = { ids: string[]; count: number; missingMobileFields: boolean }
 // refreshed in the background, so a search anyone has run before answers at once on any server,
 // even after a quiet night. The big US collection takes 2 to 4 seconds per new search on the
 // search server; repeats cost nothing.
+type Query = ReturnType<typeof toTypesense>
 const cachedSearch = unstable_cache(
-  async (alias: string, f: Filters, offset: number, limit: number): Promise<Result> => searchIdsLive(alias, f, offset, limit),
-  ['leads-search-v1'],
+  async (alias: string, p: Query, offset: number, limit: number): Promise<Result> => searchIdsLive(alias, p, offset, limit),
+  ['leads-search-v2'],
   { revalidate: 3600, tags: ['leads-search'] },
 )
 
 /** Matching ids (in Typesense order) and the exact count. */
 export async function searchIds(alias: string, f: Filters, offset: number, limit: number): Promise<Result> {
-  // unstable_cache keys on its arguments; normalise the filters so key order doesn't matter
-  return cachedSearch(alias, JSON.parse(stableKey(f)) as Filters, offset, limit)
+  // Keyed on the query actually sent to Typesense, so a change to how filters translate can never
+  // serve an answer worked out the old way.
+  return cachedSearch(alias, toTypesense(f), offset, limit)
 }
 
 /** Straight to Typesense. Steps 250 hits at a time (PRD 7.5). */
-async function searchIdsLive(alias: string, f: Filters, offset: number, limit: number): Promise<Result> {
-  const p = toTypesense(f)
+async function searchIdsLive(alias: string, p: Query, offset: number, limit: number): Promise<Result> {
   const ids: string[] = []
   let found = 0
   for (;;) {

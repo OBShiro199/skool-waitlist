@@ -1,6 +1,6 @@
 import { clampInt, guard, json } from '@/lib/leads/guard'
 import { DATASETS, isDataset } from '@/lib/leads/datasets'
-import { asksForMobiles, type Filters } from '@/lib/leads/filters'
+import { asksForMobiles, toTypesense, type Filters } from '@/lib/leads/filters'
 import { searchConfigured, searchIds } from '@/lib/leads/typesense'
 import { rowsByIds, rowsConfigured } from '@/lib/leads/rows'
 import { mockEnabled, mockSearch } from '@/lib/leads/mock'
@@ -38,7 +38,7 @@ export async function POST(req: Request) {
 
   if (!searchConfigured() || !rowsConfigured()) return json({ error: 'search_not_configured' }, 503)
   try {
-    const key = stableKey([dataset, filters, offset, limit])
+    const key = stableKey([dataset, toTypesense(filters), offset, limit]) // the real query, as in the shared cache
     let hit = results.get(key)
     if (!hit) {
       const { ids, count, missingMobileFields } = await searchIds(DATASETS[dataset].alias, filters, offset, limit)
