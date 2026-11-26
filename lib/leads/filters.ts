@@ -90,12 +90,13 @@ export function toTypesense(f: Filters, now = new Date()) {
   if (fMin !== null) c.push(`founded:>=${fMin}`)
   if (fMax !== null) c.push(`founded:<=${fMax}`)
   c.push(contains('smart_tags', list(f, 'tags')))
-  // Keywords: any of the words in the job title, company name, skills or tech stack
+  // Keywords: any of the words in the job title or company name (skills and tech stack have their
+  // own filters; matching them here pulled in people whose role had nothing to do with the word)
   const kw = list(f, 'keywords')
   if (kw.length) {
     // whole words, not word starts: "solar" must not pull in every "Solaris" engineer
     const words = kw.map(clean).filter(Boolean).map((v) => `\`${v}\``)
-    const parts = words.length ? ['current_title', 'company', 'skills', 'tech'].map((field) => `${field}:[${words.join(', ')}]`) : []
+    const parts = words.length ? ['current_title', 'company'].map((field) => `${field}:[${words.join(', ')}]`) : []
     if (parts.length) c.push(`(${parts.join(' || ')})`)
   }
   c.push(contains('skills', list(f, 'skills')))

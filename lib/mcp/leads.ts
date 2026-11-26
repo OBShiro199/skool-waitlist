@@ -21,7 +21,7 @@ export const searchShape = {
     'Which database. "uk-eu" = United Kingdom, Ireland and Europe (3.7M leads, default). "us" = United States (6.2M leads). Pick "us" whenever the user asks for US/American leads.',
   ),
   keywords: words(
-    'Words found in the job title, company name, skills or tech stack (any word matches, whole words). Best for trades, niches and products: ["plumber","plumbing"], ["solar"], ["shopify"]. Include singular and plural or close variants.',
+    'Words in the job title or company name (any word matches, whole words). Best for trades and niches: ["plumber","plumbing"], ["solar"], ["recruitment"]. Include singular and plural or close variants. For software a company uses, use tech_stack; for skills, use skills.',
   ),
   job_titles: words('Words or phrases in the current job title, matched at word starts: ["CEO","founder"], ["head of sales"]. CEO/CTO/CFO also find "Chief Executive" etc.'),
   exclude_job_titles: words('Leave out titles with these words, e.g. ["intern","assistant"].'),
@@ -55,10 +55,10 @@ export const searchShape = {
   has_website: yes('Only companies with a website.'),
   email_status: words('Work email status: "VALID" or "CATCH_ALL".'),
   mobile_country_codes: words('Mobile dialling codes, e.g. ["+44"].'),
-  is_hiring: yes('Company is hiring now.'),
+  is_hiring: yes('Company is hiring now. Sparse data: only a few hundred leads are flagged, so it shrinks results a lot.'),
   open_to_work: yes('Person is open to work.'),
   has_funding: yes('Company has raised funding.'),
-  search_text: z.string().max(80).optional().describe('Free text matched against name, job title and company (all words must match).'),
+  search_text: z.string().max(80).optional().describe('Free text matched against name, job title and company, best matches first. Prefer keywords, job_titles or company_names.'),
 }
 export const searchSchema = z.object(searchShape)
 export type SearchArgs = z.infer<typeof searchSchema>
@@ -98,7 +98,19 @@ const SIZE_WORDS: Record<string, string[]> = {
 
 export type Unmatched = { filter: string; value: string; suggestions: string[] }
 
+// The data mixes LinkedIn's old and new industry names ("Hospital & Health Care" and "Hospitals
+// and Health Care"): the same words once 'and' and plurals are ignored.
+const twinKey = (v: string) => norm(v).split(' ').filter((w) => w !== 'and').map((w) => w.replace(/s$/, '')).join(' ')
+
 function resolve(facet: string, label: string, inputs: string[] | undefined, options: Facets[string] | undefined, out: Unmatched[], many = 6): string[] {
+  const got = resolveRaw(facet, label, inputs, options, out, many)
+  if (!got.length || !options?.length) return got
+  const keys = new Set(got.map(twinKey))
+  for (const o of options) if (keys.has(twinKey(o.value))) got.push(o.value)
+  return [...new Set(got)]
+}
+
+function resolveRaw(facet: string, label: string, inputs: string[] | undefined, options: Facets[string] | undefined, out: Unmatched[], many = 6): string[] {
   if (!inputs?.length) return []
   const opts = options ?? []
   const byNorm = new Map(opts.map((o) => [norm(o.value), o.value]))
@@ -146,7 +158,7 @@ function sizes(inputs: string[] | undefined, out: Unmatched[]): string[] {
 const SYNONYMS: Record<string, string[]> = {
   ceo: ['chief executive'], cto: ['chief technology', 'chief technical'], cfo: ['chief financial', 'finance director'],
   coo: ['chief operating', 'operations director'], cmo: ['chief marketing'], cro: ['chief revenue'], cio: ['chief information'],
-  ciso: ['chief information security'], md: ['managing director'], vp: ['vice president'], founder: ['co-founder', 'owner'],
+  ciso: ['chief information security'], md: ['managing director'], vp: ['vice president'], founder: ['co-founder'],
   hr: ['human resources', 'people director', 'head of people', 'people partner'],
 }
 const expand = (vals: string[] | undefined) => {
@@ -250,9 +262,11 @@ function describe(f: Filters): { label: string; value: string }[] {
     else if (k === 'q') out.push({ label: 'Search', value: String(v) })
     else if (typeof v === 'boolean' && BOOL_LABELS[k]) out.push({ label: BOOL_LABELS[k][v ? 0 : 1], value: '' })
   }
-  range('Employees', f.employeesMin, f.employeesMax)
-  range('Founded', f.foundedMin, f.foundedMax)
-  range('Months in role', f.tenureMin, f.tenureMax)
+  // shown the way the search runs them: a reversed range is searched the right way round
+  const sorted = (lo: unknown, hi: unknown) => (typeof lo === 'number' && typeof hi === 'number' && lo > hi ? [hi, lo] : [lo, hi])
+  range('Employees', ...(sorted(f.employeesMin, f.employeesMax) as [unknown, unknown]))
+  range('Founded', ...(sorted(f.foundedMin, f.foundedMax) as [unknown, unknown]))
+  range('Months in role', ...(sorted(f.tenureMin, f.tenureMax) as [unknown, unknown]))
   return out
 }
 

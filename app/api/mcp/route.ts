@@ -34,7 +34,7 @@ const fail = (text: string) => ({ isError: true, content: [{ type: 'text' as con
 
 function unmatchedNote(p: Plan) {
   if (!p.unmatched.length) return ''
-  return `\n\nNot matched (left out of the search): ${p.unmatched
+  return `\n\nCould not use: ${p.unmatched
     .map((u) => `${u.filter} "${u.value}"${u.suggestions.length ? ` (closest: ${u.suggestions.slice(0, 4).join('; ')})` : ''}`)
     .join('; ')}. Retry with one of the closest values, or use keywords.`
 }
@@ -83,10 +83,18 @@ const handler = createMcpHandler(
         const m = member(ctx)
         if (limited(`mcp:${m.id}`, 60, 60_000)) return fail('Too many searches in a minute. Wait a moment and try again.')
         const p = await plan(args)
+        if (p.unmatched.length) {
+          // never fall back to a wider search: the member asked for something specific
+          return {
+            isError: true,
+            content: [{ type: 'text', text: `Not searched: some values could not be used.${unmatchedNote(p)}` }],
+            structuredContent: { kind: 'unmatched', region: p.region, unmatched: p.unmatched, filters: p.applied },
+          }
+        }
         const [{ ids, count }, allow] = await Promise.all([idsFor(p.region, p.filters, 0, 10), allowance(m)])
         const rows = (await rowsFor(p.region, ids)).map(previewRow)
         const filters = p.applied.map((a) => (a.value ? `${a.label}: ${a.value}` : a.label)).join(' · ') || 'no filters'
-        const lines = rows.slice(0, 5).map((r) => `- ${r.name} · ${r.title ?? '—'} · ${r.company ?? '—'} · ${r.location ?? '—'}${r.has_mobile ? ' · mobile' : ''}${r.has_email ? ' · email' : ''}`)
+        const lines = rows.slice(0, 10).map((r) => `- ${r.name} · ${r.title ?? '—'} · ${r.company ?? '—'} · ${r.location ?? '—'}${r.has_mobile ? ' · mobile' : ''}${r.has_email ? ' · email' : ''}`)
         const text =
           `${nf(count)} ${label(p.region)} leads match (${filters}).` +
           (rows.length ? `\nFirst results:\n${lines.join('\n')}` : '') +
