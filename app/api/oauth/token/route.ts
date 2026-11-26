@@ -35,8 +35,8 @@ export async function POST(req: Request) {
     if (redirect && redirect !== code.ru) return oauthError('invalid_grant', 'redirect_uri does not match the authorization request.')
     const verifier = p.get('code_verifier') ?? ''
     if (!/^[A-Za-z0-9._~-]{43,128}$/.test(verifier) || s256(verifier) !== code.cc) return oauthError('invalid_grant', 'PKCE verification failed.')
-    const resource = p.get('resource')
-    if (resource && code.res && resource !== code.res) return oauthError('invalid_target', 'The resource does not match the authorization request.')
+    const resource = p.get('resource')?.replace(/\/$/, '') ?? null
+    if (resource && code.res && resource !== code.res.replace(/\/$/, '')) return oauthError('invalid_target', 'The resource does not match the authorization request.')
     if (resource && resource !== `${originOf(req)}${MCP_PATH}`) return oauthError('invalid_target', 'Unknown resource.')
     if (!spend(`code:${code.j}`, CODE_TTL + 60)) return oauthError('invalid_grant', 'The authorization code has already been used.')
     const client = await getClient(code.cid)
