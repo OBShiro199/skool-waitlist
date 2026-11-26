@@ -51,8 +51,10 @@ async function allowance(m: Member) {
 const INSTRUCTIONS = `Build Software Solo Leads: B2B contact search for Vault members over two databases, UK & Europe (3.7M leads, "uk-eu") and the United States (6.2M, "us"). Contact details (mobiles, emails) are only ever delivered in CSV exports.
 
 How to help well:
+- Think before you show. Work out the most useful search first with count_leads: it compares up to 5 versions of a search in one call (for example strict vs broader keywords, with and without a filter) and returns counts plus sample job titles and companies, with no results card. Pick the version that best fits what the user asked for: on-target samples first, then enough leads for their number.
+- Then call find_leads ONCE with that search. find_leads shows the user a results card, so never call it repeatedly while refining; one request should normally produce one card. Briefly say what you compared and why you chose it.
 - Turn the request into filters. "200 plumbers in the UK with mobiles" → region "uk-eu", countries ["United Kingdom"], keywords ["plumber","plumbing"], has_mobile true. Trades and niches work best as keywords (with variants); job titles suit roles like CEO or Head of Sales; industries suit sectors.
-- Always call find_leads first to show the count and a preview. If it reports values it could not match, fix them (use the closest values or list_filter_values) and search again.
+- If count_leads or find_leads reports values it could not use, fix them (closest values or list_filter_values) before showing anything.
 - Before export_leads, tell the user how many leads will be exported and how many of their monthly exports that uses, unless they already gave an exact number. Never export more than asked.
 - After exporting, give the user the download link. Do not paste contact details into the chat.
 - If there are too many results, suggest narrowing (seniority, company size, city, has_mobile); if too few, suggest broader keywords or fewer filters.`
@@ -78,7 +80,7 @@ const handler = createMcpHandler(
       {
         title: 'Find leads',
         description:
-          'Search the Build Software Solo leads databases (UK & Europe, or US). Returns the exact number of matching leads, the filters used and a preview of 10 leads (name, title, company, location, and whether a mobile/email exists). Free: does not use the export allowance. Call this before export_leads.',
+          'Shows the user a results card for ONE chosen search: the exact count, the filters used and 10 leads (name, title, company, location, whether a mobile/email exists). Use count_leads first to compare versions of the search, then call this once with the best one. Free: does not use the export allowance.',
         inputSchema: searchSchema,
         annotations: { title: 'Find leads', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
         _meta: { ui: { resourceUri: VIEW_URI }, 'ui/resourceUri': VIEW_URI },
@@ -108,6 +110,37 @@ const handler = createMcpHandler(
           content: [{ type: 'text', text }],
           structuredContent: { kind: 'search', region: p.region, region_label: label(p.region), count, filters: p.applied, unmatched: p.unmatched, preview: rows, allowance: allow, args },
         }
+      },
+    )
+
+    server.registerTool(
+      'count_leads',
+      {
+        title: 'Compare searches',
+        description:
+          'Compare up to 5 versions of a lead search in one call, without showing anything to the user. Returns each version\'s exact count, the filters it used and 5 sample job titles and companies so you can judge how on-target it is. Use this to work out the best search before calling find_leads once. Free.',
+        inputSchema: z.object({
+          searches: z.array(searchSchema.extend({ label: z.string().max(60).optional().describe('A short name for this version, e.g. "strict" or "with heating engineers".') })).min(1).max(5),
+        }),
+        annotations: { title: 'Compare searches', readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
+      },
+      async ({ searches }, ctx) => {
+        const m = member(ctx)
+        if (limited(`mcp:${m.id}`, 60, 60_000)) return fail('Too many searches in a minute. Wait a moment and try again.')
+        const results = await Promise.all(
+          searches.map(async ({ label: name, ...args }, i) => {
+            const p = await plan(args)
+            const tag = name?.trim() || `version ${i + 1}`
+            if (p.unmatched.length) return { label: tag, region: p.region, count: null, filters: p.applied, unmatched: p.unmatched, samples: [], note: unmatchedNote(p).trim() }
+            const { ids, count } = await idsFor(p.region, p.filters, 0, 5)
+            const samples = (await rowsFor(p.region, ids)).map((r) => `${r.current_title ?? '—'} @ ${r.company_name ?? '—'}`)
+            return { label: tag, region: p.region, count, filters: p.applied, unmatched: [], samples, note: '' }
+          }),
+        )
+        const text = results
+          .map((r) => `${r.label} (${label(r.region)}): ${r.count === null ? 'not searched' : `${nf(r.count)} leads`}\n  filters: ${r.filters.map((a) => (a.value ? `${a.label}: ${a.value}` : a.label)).join(' · ') || 'none'}${r.samples.length ? `\n  samples: ${r.samples.join(' | ')}` : ''}${r.note ? `\n  ${r.note.replace(/\n/g, ' ')}` : ''}`)
+          .join('\n')
+        return { content: [{ type: 'text', text }], structuredContent: { versions: results } }
       },
     )
 
