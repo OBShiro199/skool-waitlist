@@ -93,7 +93,9 @@ export function toTypesense(f: Filters, now = new Date()) {
   // Keywords: any of the words in the job title, company name, skills or tech stack
   const kw = list(f, 'keywords')
   if (kw.length) {
-    const parts = ['current_title', 'company', 'skills', 'tech'].map((field) => contains(field, kw)).filter(Boolean)
+    // whole words, not word starts: "solar" must not pull in every "Solaris" engineer
+    const words = kw.map(clean).filter(Boolean).map((v) => `\`${v}\``)
+    const parts = words.length ? ['current_title', 'company', 'skills', 'tech'].map((field) => `${field}:[${words.join(', ')}]`) : []
     if (parts.length) c.push(`(${parts.join(' || ')})`)
   }
   c.push(contains('skills', list(f, 'skills')))
