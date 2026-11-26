@@ -156,13 +156,23 @@ const expand = (vals: string[] | undefined) => {
   for (const t of vals) for (const x of [t, ...(SYNONYMS[t.trim().toLowerCase()] ?? [])]) if (!seen.has(x.toLowerCase())) { seen.add(x.toLowerCase()); out.push(x) }
   return out
 }
-const clean = (vals: string[] | undefined) => vals?.map((v) => v.trim()).filter((v) => /[\p{L}\p{N}]/u.test(v))
+const hasWord = (v: string) => /[\p{L}\p{N}]/u.test(v)
 const bare = (v: string) => v.trim().toLowerCase().replace(/^[a-z]+:\/\//, '').replace(/^www\./, '').replace(/[/?#].*$/, '')
 
 export type Plan = { region: DatasetId; filters: Filters; applied: { label: string; value: string }[]; unmatched: Unmatched[] }
 
 export async function plan(a: SearchArgs): Promise<Plan> {
   const unmatched: Unmatched[] = []
+  // values with no letters or digits ("*", "%", "(((") can't match anything: report them, never
+  // drop them silently (a dropped filter would widen the search, and an export, to everyone)
+  const clean = (label: string, vals: string[] | undefined) => {
+    const out: string[] = []
+    for (const v of vals ?? []) {
+      if (hasWord(v)) out.push(v.trim())
+      else unmatched.push({ filter: label, value: v, suggestions: [] })
+    }
+    return out.length ? out : undefined
+  }
   const usAsked = (a.countries ?? []).some((c) => ['us', 'usa', 'united states', 'america', 'united states of america', 'u s a'].includes(norm(c)))
   const region: DatasetId = a.region ?? (usAsked ? 'us' : 'uk-eu')
   const { facets } = await facetsFor(region)
@@ -171,21 +181,27 @@ export async function plan(a: SearchArgs): Promise<Plan> {
     if (v === undefined || v === null || (Array.isArray(v) && !v.length)) return
     f[k] = v
   }
-  set('keywords', clean(a.keywords))
-  set('titles', expand(clean(a.job_titles)))
-  set('titlesNot', expand(clean(a.exclude_job_titles)))
+  set('keywords', clean('keywords', a.keywords))
+  set('titles', expand(clean('job_titles', a.job_titles)))
+  set('titlesNot', expand(clean('exclude_job_titles', a.exclude_job_titles)))
   set('seniorities', resolve('seniority', 'seniority', a.seniority, facets.seniority, unmatched))
   set('departments', resolve('department', 'departments', a.departments, facets.department, unmatched))
   set('industries', resolve('industry', 'industries', a.industries, facets.industry, unmatched))
   set('industriesNot', resolve('industry', 'exclude_industries', a.exclude_industries, facets.industry, unmatched))
   // the US database has one contact country; asking for it is the same as no filter
+  const before = unmatched.length
   const countries = resolve('country', 'countries', a.countries, facets.country, unmatched, 1)
+  for (const u of unmatched.slice(before)) {
+    u.suggestions = region === 'us'
+      ? ['This country is in the UK & Europe database: search it separately with region "uk-eu"']
+      : norm(u.value).match(/^(us|usa|united states|america)/) ? ['US leads are in the US database: search it separately with region "us"'] : u.suggestions
+  }
   set('countries', region === 'us' && countries.length === 1 && countries[0] === 'United States' ? undefined : countries)
   set('hqCountries', resolve('country', 'company_hq_countries', a.company_hq_countries, facets.hq_country, unmatched, 1))
-  set('cities', clean(a.cities))
-  set('companies', clean(a.company_names))
-  set('companiesNot', clean(a.exclude_company_names))
-  set('domains', clean(a.company_domains)?.map(bare))
+  set('cities', clean('cities', a.cities))
+  set('companies', clean('company_names', a.company_names))
+  set('companiesNot', clean('exclude_company_names', a.exclude_company_names))
+  set('domains', clean('company_domains', a.company_domains)?.map(bare))
   set('sizes', sizes(a.company_sizes, unmatched))
   set('employeesMin', a.employees_min)
   set('employeesMax', a.employees_max)
@@ -196,15 +212,18 @@ export async function plan(a: SearchArgs): Promise<Plan> {
   set('tenureMax', a.months_in_role_max)
   set('funding', resolve('funding', 'funding_stages', a.funding_stages, facets.funding, unmatched, 3))
   set('tags', resolve('tag', 'signals', a.signals, facets.tag, unmatched, 1))
-  set('skills', clean(a.skills))
-  set('languages', clean(a.languages))
-  set('tech', clean(a.tech_stack))
+  set('skills', clean('skills', a.skills))
+  set('languages', clean('languages', a.languages))
+  set('tech', clean('tech_stack', a.tech_stack))
   set('emailStatus', resolve('email_status', 'email_status', a.email_status, facets.email_status, unmatched, 1))
   set('mobileCodes', a.mobile_country_codes?.map((c) => `+${c.replace(/\D/g, '')}`).filter((c) => /^\+\d{1,4}$/.test(c)))
   for (const [arg, key] of [['has_mobile', 'hasMobile'], ['has_email', 'hasEmail'], ['has_personal_email', 'hasPersonalEmail'], ['has_linkedin', 'hasLinkedin'], ['has_website', 'hasWebsite'], ['is_hiring', 'isHiring'], ['open_to_work', 'openToWork'], ['has_funding', 'hasFunding']] as const) {
     if (typeof a[arg] === 'boolean') f[key] = a[arg]
   }
-  if (a.search_text?.trim()) f.q = a.search_text.trim()
+  if (a.search_text?.trim()) {
+    if (hasWord(a.search_text)) f.q = a.search_text.trim()
+    else unmatched.push({ filter: 'search_text', value: a.search_text, suggestions: [] })
+  }
   return { region, filters: f, applied: describe(f), unmatched }
 }
 
