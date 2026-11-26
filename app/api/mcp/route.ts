@@ -34,9 +34,13 @@ const fail = (text: string) => ({ isError: true, content: [{ type: 'text' as con
 
 function unmatchedNote(p: Plan) {
   if (!p.unmatched.length) return ''
-  return `\n\nCould not use: ${p.unmatched
-    .map((u) => `${u.filter} "${u.value}"${u.suggestions.length ? ` (closest: ${u.suggestions.slice(0, 4).join('; ')})` : ''}`)
-    .join('; ')}. Retry with one of the closest values, or use keywords.`
+  const advice = (u: Plan['unmatched'][number]) => {
+    if (u.reason === 'no_letters') return 'it has no letters or numbers, so it can\'t match anything; drop it or use real words'
+    if (u.reason === 'other_region') return u.suggestions[0]
+    if (u.suggestions.length) return `closest real values: ${u.suggestions.slice(0, 4).join('; ')}`
+    return `no similar value exists; call list_filter_values for ${u.filter}, or search the idea as keywords instead`
+  }
+  return `\n\nCould not use:\n${p.unmatched.map((u) => `- ${u.filter} "${u.value}": ${advice(u)}`).join('\n')}`
 }
 
 async function allowance(m: Member) {
@@ -146,7 +150,9 @@ const handler = createMcpHandler(
           if (id) batches.push(id)
         }
         const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'leads'
-        const filename = `leads-${slug}-${p.region}-${new Date().toISOString().slice(0, 10)}.csv`
+        // date and time, so two exports with the same name on the same day stay apart once downloaded
+        const stamp = new Date().toISOString().slice(0, 16).replace('T', '-').replace(':', '')
+        const filename = `leads-${slug}-${p.region}-${stamp}.csv`
         const url = downloadUrl(m.origin, { u: m.id, h: m.handle, e: batches, r: p.region, f: filename })
         const left = allow.remaining - rows.length
         const withMobile = rows.filter((r) => r.mobile_phone).length

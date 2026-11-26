@@ -25,6 +25,7 @@ export const searchShape = {
   ),
   job_titles: words('Words or phrases in the current job title, matched at word starts: ["CEO","founder"], ["head of sales"]. CEO/CTO/CFO also find "Chief Executive" etc.'),
   exclude_job_titles: words('Leave out titles with these words, e.g. ["intern","assistant"].'),
+  include_assistants: yes('Leadership title searches (CEO, founder, director…) leave out assistant-type roles like "Executive Assistant to the CEO" or "Chief of Staff". Set true to keep them.'),
   seniority: words('Any of: c-level, vp, director, manager, senior, junior. "owner"/"founder"/"executive" mean c-level.'),
   departments: words('E.g. sales, marketing, engineering, finance, HR, operations, legal, design, customer support, consulting.'),
   industries: words('Company industries (LinkedIn names), e.g. "Software Development", "Construction", "Hospitals and Health Care". Partial names work ("software"). Use list_filter_values to see them all.'),
@@ -96,7 +97,7 @@ const SIZE_WORDS: Record<string, string[]> = {
   enterprise: ['5001 to 10000', '10001+'],
 }
 
-export type Unmatched = { filter: string; value: string; suggestions: string[] }
+export type Unmatched = { filter: string; value: string; suggestions: string[]; reason?: 'no_letters' | 'other_region' | 'unknown' }
 
 // The data mixes LinkedIn's old and new industry names ("Hospital & Health Care" and "Hospitals
 // and Health Care"): the same words once 'and' and plurals are ignored.
@@ -181,7 +182,7 @@ export async function plan(a: SearchArgs): Promise<Plan> {
     const out: string[] = []
     for (const v of vals ?? []) {
       if (hasWord(v)) out.push(v.trim())
-      else unmatched.push({ filter: label, value: v, suggestions: [] })
+      else unmatched.push({ filter: label, value: v, suggestions: [], reason: 'no_letters' })
     }
     return out.length ? out : undefined
   }
@@ -195,7 +196,13 @@ export async function plan(a: SearchArgs): Promise<Plan> {
   }
   set('keywords', clean('keywords', a.keywords))
   set('titles', expand(clean('job_titles', a.job_titles)))
-  set('titlesNot', expand(clean('exclude_job_titles', a.exclude_job_titles)))
+  // "CEO" also matches "Executive Assistant to the CEO": leave those out of leadership searches
+  const leadership = /\b(ceo|cto|cfo|coo|cmo|cro|cio|ciso|chief|founder|co-founder|owner|president|md|managing director|director|vp|vice president|head|partner)\b/i
+  const notTitles = expand(clean('exclude_job_titles', a.exclude_job_titles)) ?? []
+  if (!a.include_assistants && (a.job_titles ?? []).some((t) => leadership.test(t))) {
+    for (const x of ['assistant to', 'executive assistant', 'personal assistant', 'pa to', 'ea to', 'chief of staff', 'secretary to']) if (!notTitles.includes(x)) notTitles.push(x)
+  }
+  set('titlesNot', notTitles.length ? notTitles : undefined)
   set('seniorities', resolve('seniority', 'seniority', a.seniority, facets.seniority, unmatched))
   set('departments', resolve('department', 'departments', a.departments, facets.department, unmatched))
   set('industries', resolve('industry', 'industries', a.industries, facets.industry, unmatched))
@@ -204,6 +211,7 @@ export async function plan(a: SearchArgs): Promise<Plan> {
   const before = unmatched.length
   const countries = resolve('country', 'countries', a.countries, facets.country, unmatched, 1)
   for (const u of unmatched.slice(before)) {
+    u.reason = 'other_region'
     u.suggestions = region === 'us'
       ? ['This country is in the UK & Europe database: search it separately with region "uk-eu"']
       : norm(u.value).match(/^(us|usa|united states|america)/) ? ['US leads are in the US database: search it separately with region "us"'] : u.suggestions
@@ -234,7 +242,7 @@ export async function plan(a: SearchArgs): Promise<Plan> {
   }
   if (a.search_text?.trim()) {
     if (hasWord(a.search_text)) f.q = a.search_text.trim()
-    else unmatched.push({ filter: 'search_text', value: a.search_text, suggestions: [] })
+    else unmatched.push({ filter: 'search_text', value: a.search_text, suggestions: [], reason: 'no_letters' })
   }
   return { region, filters: f, applied: describe(f), unmatched }
 }
